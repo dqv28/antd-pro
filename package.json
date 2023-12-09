@@ -48,9 +48,9 @@
   ],
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
-    "@ant-design/pro-components": "1.1.1",
+    "@ant-design/pro-components": "^1.1.16",
     "@umijs/route-utils": "^2.0.0",
-    "antd": "^4.20.0",
+    "antd": "^4.24.0",
     "classnames": "^2.3.0",
     "firebase": "^10.7.0",
     "lodash": "^4.17.0",

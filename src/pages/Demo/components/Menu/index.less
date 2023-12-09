@@ -1,0 +1,101 @@
+button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+/* TABS */
+.menu__avatar {
+  margin-bottom: 20px;
+  border: 1px solid #fff;
+  cursor: pointer;
+}
+
+.menu__item {
+  width: 100%;
+  height: auto;
+  padding: 20px 0;
+  background-color: #006edc;
+  border: none;
+
+  &:hover {
+    background-color: #006edc;
+  }
+
+  &:focus-within {
+    background-color: #006edc;
+  }
+}
+
+/* CHAT */
+
+.chat__action {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+}
+
+.chat__search {
+  flex: 1;
+  margin-right: 8px;
+  color: rgba(0, 0, 0, 0.5);
+  background-color: #eaedf0;
+  border-radius: 6px;
+}
+
+.chat__search:hover {
+  background-color: #eaedf0;
+}
+
+.chat_btn {
+  margin-left: 4px;
+  border: none;
+  border-radius: 4px;
+
+  &:hover {
+    color: #333;
+    background-color: #eaedf0;
+  }
+
+  &:focus-within {
+    color: #333;
+  }
+}
+
+.more_btn,
+.filter_btn {
+  border: none;
+
+  &:hover {
+    color: #333;
+    background-color: #eaedf0;
+  }
+
+  &:focus-within {
+    background-color: #e5efff;
+  }
+}
+
+.filterSearch_btn {
+  color: #081c36;
+  background-color: #eaedf0;
+  border: none;
+  border-radius: 16px;
+
+  &:hover {
+    color: #081c36;
+    background-color: #dfe2e7;
+  }
+}
+
+.item__title,
+.item__desc {
+  --height: 22px;
+  display: block;
+  display: -webkit-box;
+  height: var(--height);
+  overflow: hidden;
+  line-height: var(--height);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}

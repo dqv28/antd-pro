@@ -62,16 +62,10 @@ const ConversationList: React.FC = ({ children }) => {
           data,
         };
       }}
-      editable={{
-        onSave: async (key, record, originRow) => {
-          console.log(key, record, originRow);
-          return true;
-        },
-      }}
       metas={{
         title: {
           dataIndex: 'name',
-          render: (_, record) => (
+          render: (_: any, record: any) => (
             <span
               className={styles.cns_name}
               style={{

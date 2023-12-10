@@ -2,7 +2,6 @@ import type { ProCardTabsProps } from '@ant-design/pro-components'
 import { ProCard } from "@ant-design/pro-components"
 import { Button } from "antd"
 import { Input } from 'antd';
-// import type { SearchProps } from '../Search';
 import React, { useState } from "react"
 
 import './index.css'

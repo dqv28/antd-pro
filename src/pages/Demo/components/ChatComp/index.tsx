@@ -6,7 +6,6 @@ import './index.css'
 
 const ChatComp: React.FC = ({children}) => {
     return (
-        // <span>{children ? 'Tất cả' : 'Chưa đọc'}</span>
         <>
             {
                 children ? 

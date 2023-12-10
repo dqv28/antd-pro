@@ -83,7 +83,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     },
     menuHeaderRender: undefined,
     
-    childrenRender: (children: any, props: { location: { pathname: string | string[]; }; }) => {
+    childrenRender: (children: any, props: any) => {
       if (!initialState?.currentUser) {
         return;
       }

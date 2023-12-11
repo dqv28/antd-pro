@@ -1,0 +1,54 @@
+.pro_card_content {
+  :global(.ant-pro-card-title) {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+}
+
+.head_action {
+  border-radius: 6px;
+
+  &:hover {
+    background-color: #eaedf0;
+  }
+
+  &:focus-within {
+    background-color: none;
+  }
+}
+
+.cancel_btn {
+  background-color: #eaedf0;
+
+  &:hover {
+    background-color: #dfe2e7;
+  }
+}
+
+.type_list {
+  width: 100%;
+  margin-top: 16px;
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.type_btn {
+  padding: 0 12px;
+  color: #081c36;
+  font-size: 13px;
+  background-color: #eaedf0;
+  border-radius: 16px;
+
+  // &:first-child {
+  //   color: #fff;
+  //   background-color: #0068ff;
+  // }
+
+  &:hover {
+    background-color: #dfe2e7;
+  }
+}

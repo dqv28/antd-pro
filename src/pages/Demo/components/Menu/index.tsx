@@ -1,6 +1,11 @@
-import { DownOutlined, MessageOutlined, SmallDashOutlined } from '@ant-design/icons';
+import {
+  CaretRightOutlined,
+  DownOutlined,
+  EllipsisOutlined,
+  MessageOutlined,
+} from '@ant-design/icons';
 import { ProCard } from '@ant-design/pro-components';
-import { Avatar, Button, Dropdown, Input, Space, Tabs } from 'antd';
+import { Avatar, Badge, Button, Dropdown, Input, Tabs } from 'antd';
 import type { MenuProps } from 'antd';
 import React, { useState } from 'react';
 import ConversationList from '../ConversationList';
@@ -9,18 +14,58 @@ import styles from './index.less';
 
 const items: MenuProps['items'] = [
   {
-    label: <a href="https://www.antgroup.com">1st menu item</a>,
+    label: 'Khách hàng',
+    key: '1',
+    icon: <CaretRightOutlined style={{ color: 'rgb(217, 27, 27)' }} />,
+  },
+  {
+    label: 'Gia đình',
+    key: '2',
+    icon: <CaretRightOutlined style={{ color: 'rgb(243, 27, 200)' }} />,
+  },
+  {
+    label: 'Công việc',
+    key: '3',
+    icon: <CaretRightOutlined style={{ color: 'rgb(255, 105, 5)' }} />,
+  },
+  {
+    label: 'Bạn bè',
+    key: '4',
+    icon: <CaretRightOutlined style={{ color: 'rgb(250, 192, 0)' }} />,
+  },
+  {
+    label: 'Trả lời sau',
+    key: '5',
+    icon: <CaretRightOutlined style={{ color: 'rgb(75, 195, 119)' }} />,
+  },
+  {
+    label: 'Đồng nghiệp',
+    key: '6',
+    icon: <CaretRightOutlined style={{ color: 'rgb(0, 104, 255)' }} />,
+  },
+  {
+    type: 'divider',
+  },
+  {
+    label: 'Quản lý thẻ phân loại',
+    key: '10',
+  },
+];
+
+const moreItems: MenuProps['items'] = [
+  {
+    label: <a href="https://www.antgroup.com">Đánh dấu đã đọc</a>,
     key: '0',
   },
   {
-    label: <a href="https://www.aliyun.com">2nd menu item</a>,
+    label: <a href="https://www.aliyun.com">Gửi tin đồng thời</a>,
     key: '1',
   },
   {
     type: 'divider',
   },
   {
-    label: '3rd menu item',
+    label: 'Trở lại giao diện cơ bản',
     key: '3',
   },
 ];
@@ -29,8 +74,10 @@ const Menu: React.FC = () => {
   const [isFocus, setIsFocus] = useState(false);
   const [hasChange, setHasChange] = useState(false);
 
+  const [current, setCurrent] = useState('mail');
+
   return (
-    <ProCard direction="row" colSpan={7} bodyStyle={{ padding: '0' }} bordered>
+    <ProCard bodyStyle={{ padding: 0 }}>
       <ProCard
         colSpan={4}
         bodyStyle={{
@@ -46,17 +93,28 @@ const Menu: React.FC = () => {
           size={45}
           className={styles.menu__avatar}
         />
+
         <Button
           className={styles.menu__item}
           icon={
-            <MessageOutlined
+            <Badge
+              count="5+"
+              size="small"
               style={{
-                color: '#fff',
-                fontSize: 25,
+                backgroundColor: '#c31818',
+                padding: '0 4px',
+                borderColor: '#c31818',
               }}
-            />
+            >
+              <MessageOutlined
+                style={{
+                  color: '#fff',
+                  fontSize: 25,
+                }}
+              />
+            </Badge>
           }
-        ></Button>
+        />
       </ProCard>
       <ProCard
         className={styles.chat}
@@ -166,40 +224,57 @@ const Menu: React.FC = () => {
                 padding: '0 16px',
                 marginBottom: 0,
               }}
+              tabBarExtraContent={
+                <>
+                  <Dropdown menu={{ items }} trigger={['click']}>
+                    <Button
+                      size="small"
+                      shape="round"
+                      style={{
+                        padding: '0 6px',
+                      }}
+                      children={
+                        <span>
+                          Phân loại
+                          <DownOutlined style={{ marginLeft: 6 }} />
+                        </span>
+                      }
+                      className={styles.type_btn}
+                    />
+                  </Dropdown>
+                  <Dropdown
+                    menu={{
+                      items: moreItems,
+                    }}
+                    trigger={['click']}
+                  >
+                    <Button
+                      size="small"
+                      shape="circle"
+                      style={{
+                        padding: 4,
+                        marginLeft: 4,
+                      }}
+                      icon={<EllipsisOutlined />}
+                      className={styles.more_btn}
+                    />
+                  </Dropdown>
+                </>
+              }
             >
               <Tabs.TabPane
                 tab="Tất cả"
                 key="1"
                 style={{
-                  height: 500,
+                  height: 600,
                   overflow: 'auto',
                 }}
               >
                 <ConversationList />
               </Tabs.TabPane>
               <Tabs.TabPane tab="Chưa đọc" key="2">
-                <ConversationList children />
+                <ConversationList isUnRead />
               </Tabs.TabPane>
-
-              <Tabs.TabPane
-                tab={
-                  <Dropdown
-                    // menu={{ items }}
-                    overlay={<h1>a</h1>}
-                    trigger={['click']}
-                  >
-                    <a onClick={(e) => e.preventDefault()}>
-                      <Space>
-                        Click me
-                        <DownOutlined />
-                      </Space>
-                    </a>
-                  </Dropdown>
-                }
-              />
-              {/* <Tabs.TabPane
-                tab={<Button size="small" shape="circle" icon={<SmallDashOutlined />} />}
-              /> */}
             </Tabs>
           </div>
         )}

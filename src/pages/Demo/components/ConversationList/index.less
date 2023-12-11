@@ -1,34 +1,33 @@
 .cns_item {
   display: block;
-  padding: 16px;
+  padding: 12px 16px;
   border-bottom: none !important;
   cursor: pointer;
-}
 
-.cns_name,
-.cns_desc {
-  display: block;
-  display: -webkit-box;
-  height: 22px;
-  overflow: hidden;
-  line-height: 22px;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
+  &:hover {
+    background-color: #f3f5f6;
+  }
 }
 
 .cns_desc_wrapper,
-.cns_name {
+.cns_title {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.cns_name {
+.cns_title {
   flex: 1;
   font-size: 16px;
 }
 
+.cns_desc {
+  width: 100%;
+}
+
 .cns_desc_bagde {
+  min-width: 20px;
+  margin-left: 4px;
   padding: 0 4px;
   color: #fff;
   font-size: 12px;

@@ -1,10 +1,14 @@
-import { EditOutlined } from '@ant-design/icons';
+import { MsgIcon } from '@/components/Icons';
+import { Button, Input, Space } from 'antd';
 import React from 'react';
 
-type Props = {};
-
-const Footer = (props: Props) => {
-  return <EditOutlined key="edit" />;
+const Footer: React.FC = () => {
+  return (
+    <Space>
+      <Input />
+      <Button size="large" type="text" icon={<MsgIcon />} title="Thêm bạn vào nhóm" />
+    </Space>
+  );
 };
 
 export default Footer;

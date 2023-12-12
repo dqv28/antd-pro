@@ -1,0 +1,73 @@
+@topic-height: 60px;
+@tool-bar-height: 50px;
+
+.cns_view {
+  position: relative;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 100%;
+}
+
+.cns_topic {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: @topic-height;
+  padding: 8px 16px;
+  background-color: #fff;
+
+  &:hover .cns_topic_more {
+    display: inline-block;
+  }
+}
+
+.cns_topic_msg {
+  width: 99%;
+  margin-left: 12px;
+}
+
+.cns_topic_action {
+}
+
+.cns_topic_more {
+  display: none;
+  border-radius: 50%;
+  &:hover {
+    background-color: #dfe2e7;
+  }
+}
+
+.cns_content {
+  height: 600px;
+  padding: calc(@topic-height + 8px) 16px calc(@topic-height + 20px);
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.cns_toolbars {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  height: @tool-bar-height;
+  padding: 4px 8px;
+  background-color: #fff;
+}
+
+.cns_toolbars_btn {
+  padding: 10px;
+
+  &:hover {
+    background-color: #dfe2e7;
+  }
+}

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { ProList } from '@ant-design/pro-components';
 import styles from './index.less';
-import { Avatar } from 'antd';
+import { Avatar, Typography } from 'antd';
+
+const { Text } = Typography;
 
 const mockListConversation = () => {
   return new Promise<any[]>((resolve) => {
@@ -40,6 +42,7 @@ const mockListConversation = () => {
 };
 
 const ConversationList: React.FC = ({ children }) => {
+
   return (
     <ProList<any>
       cardProps={{
@@ -47,13 +50,6 @@ const ConversationList: React.FC = ({ children }) => {
           padding: 0,
         },
       }}
-      itemCardProps={{
-        ghost: true,
-      }}
-      onItem={() => ({
-        style: {},
-        className: styles.cns_item,
-      })}
       rowKey="id"
       request={async () => {
         const data = await mockListConversation();
@@ -66,13 +62,22 @@ const ConversationList: React.FC = ({ children }) => {
         title: {
           dataIndex: 'name',
           render: (_: any, record: any) => (
-            <span
-              className={styles.cns_name}
+            <div
               style={{
                 fontWeight: children ? 600 : 450,
+                display: 'flex
+                
               }}
             >
-              {record.name}
+              <Text
+                ellipsis
+                style={{
+                  width: '100%',
+                  flex: 1,
+                }}
+              >
+                {record.name}
+              </Text>
               <span
                 style={{
                   fontSize: 12,
@@ -80,7 +85,7 @@ const ConversationList: React.FC = ({ children }) => {
               >
                 38 phút
               </span>
-            </span>
+            </div>
           ),
         },
         avatar: {
@@ -97,7 +102,15 @@ const ConversationList: React.FC = ({ children }) => {
                   color: children ? '#081c36' : '#7589a3',
                 }}
               >
-                {record.desc}
+                <Text
+                  style={{
+                    width: '200px',
+                    flex: 1,
+                  }}
+                  ellipsis
+                >
+                  {record.desc}
+                </Text>
               </span>
               {children && <span className={styles.cns_desc_bagde}>5+</span>}
             </div>

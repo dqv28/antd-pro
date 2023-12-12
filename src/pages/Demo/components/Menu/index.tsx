@@ -1,36 +1,91 @@
-import { DownOutlined, MessageOutlined, SmallDashOutlined } from '@ant-design/icons';
-import { ProCard } from '@ant-design/pro-components';
-import { Avatar, Button, Dropdown, Input, Space, Tabs } from 'antd';
+import {
+  CaretRightOutlined,
+  DownOutlined,
+  EllipsisOutlined,
+  MessageOutlined,
+} from '@ant-design/icons';
+import { ProCard, ProList } from '@ant-design/pro-components';
+import { Avatar, Badge, Button, Dropdown, Input, Tabs, Typography } from 'antd';
 import type { MenuProps } from 'antd';
 import React, { useState } from 'react';
 import ConversationList from '../ConversationList';
 
 import styles from './index.less';
+import SearchResult from './MenuComp/SearchResult';
+
+type Props = {
+  search?: boolean;
+};
 
 const items: MenuProps['items'] = [
   {
-    label: <a href="https://www.antgroup.com">1st menu item</a>,
+    label: 'Khách hàng',
+    key: '1',
+    icon: <CaretRightOutlined style={{ color: 'rgb(217, 27, 27)' }} />,
+  },
+  {
+    label: 'Gia đình',
+    key: '2',
+    icon: <CaretRightOutlined style={{ color: 'rgb(243, 27, 200)' }} />,
+  },
+  {
+    label: 'Công việc',
+    key: '3',
+    icon: <CaretRightOutlined style={{ color: 'rgb(255, 105, 5)' }} />,
+  },
+  {
+    label: 'Bạn bè',
+    key: '4',
+    icon: <CaretRightOutlined style={{ color: 'rgb(250, 192, 0)' }} />,
+  },
+  {
+    label: 'Trả lời sau',
+    key: '5',
+    icon: <CaretRightOutlined style={{ color: 'rgb(75, 195, 119)' }} />,
+  },
+  {
+    label: 'Đồng nghiệp',
+    key: '6',
+    icon: <CaretRightOutlined style={{ color: 'rgb(0, 104, 255)' }} />,
+  },
+  {
+    type: 'divider',
+  },
+  {
+    label: 'Quản lý thẻ phân loại',
+    key: '10',
+  },
+];
+
+const moreItems: MenuProps['items'] = [
+  {
+    label: <a href="https://www.antgroup.com">Đánh dấu đã đọc</a>,
     key: '0',
   },
   {
-    label: <a href="https://www.aliyun.com">2nd menu item</a>,
+    label: <a href="https://www.aliyun.com">Gửi tin đồng thời</a>,
     key: '1',
   },
   {
     type: 'divider',
   },
   {
-    label: '3rd menu item',
+    label: 'Trở lại giao diện cơ bản',
     key: '3',
   },
 ];
 
-const Menu: React.FC = () => {
-  const [isFocus, setIsFocus] = useState(false);
-  const [hasChange, setHasChange] = useState(false);
+const { Title, Text } = Typography;
+
+const Menu: React.FC<any> = (props: Props) => {
+  const [isFocus, setIsFocus] = useState<boolean>(false);
+  const [hasChange, setHasChange] = useState<boolean>(false);
+  const [searchInput, setSearchInput] = useState<string>('');
+
+  const [current, setCurrent] = useState('mail');
 
   return (
-    <ProCard direction="row" colSpan={7} bodyStyle={{ padding: '0' }} bordered>
+    <ProCard bodyStyle={{ padding: 0 }}>
       <ProCard
         colSpan={4}
         bodyStyle={{
@@ -46,17 +101,28 @@ const Menu: React.FC = () => {
           size={45}
           className={styles.menu__avatar}
         />
+
         <Button
           className={styles.menu__item}
           icon={
-            <MessageOutlined
+            <Badge
+              count="5+"
+              size="small"
               style={{
-                color: '#fff',
-                fontSize: 25,
+                backgroundColor: '#c31818',
+                padding: '0 4px',
+                borderColor: '#c31818',
               }}
-            />
+            >
+              <MessageOutlined
+                style={{
+                  color: '#fff',
+                  fontSize: 25,
+                }}
+              />
+            </Badge>
           }
-        ></Button>
+        />
       </ProCard>
       <ProCard
         className={styles.chat}
@@ -68,140 +134,195 @@ const Menu: React.FC = () => {
           setIsFocus(false);
         }}
       >
-        <div className={styles.chat__action} onClick={(e) => e.stopPropagation()}>
-          <Input
-            placeholder="Tìm kiếm"
-            className={styles.chat__search}
-            bordered={false}
-            prefix={<i className="fa-solid fa-magnifying-glass"></i>}
-            onClick={(e) => {
-              setHasChange(true);
-              setIsFocus(true);
-            }}
-            style={{
-              backgroundColor: isFocus ? '#fff' : '#eaedf0',
-              border: isFocus ? '1px solid #0068ff' : '',
-            }}
-          />
-          {hasChange ? (
-            <Button
-              className={styles.chat_btn}
-              onClick={() => {
-                setHasChange(false);
-                setIsFocus(false);
-              }}
-            >
-              Đóng
-            </Button>
-          ) : (
-            <>
-              <Button
-                className={styles.chat_btn}
-                icon={<i className="fa-solid fa-user-plus"></i>}
-              />
-              <Button
-                className={styles.chat_btn}
-                icon={<i className="fa-solid fa-user-plus"></i>}
-              />
-            </>
-          )}
-        </div>
+        {props.search ? (
+          <div style={{ padding: '20px 16px' }}>
+            <Title level={5} children="Kết quả tìm kiếm" />
+            <Text children="Nhập nội dung cần tìm trong hội thoại" />
 
-        {hasChange ? (
-          <div>
-            <ProCard
-              title="Tìm gần đây"
+            <div
               style={{
-                padding: '0 16px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: 60,
               }}
-              headStyle={{
-                padding: 0,
-              }}
-              bodyStyle={{
-                padding: '24px 0',
-              }}
-              actions={[
-                <div
-                  style={{
-                    float: 'left',
-                  }}
-                >
-                  <h4
-                    style={{
-                      textAlign: 'left',
-                      marginBottom: 14,
-                    }}
-                  >
-                    Lọc tin nhắn
-                  </h4>
-                  <Button className={styles.filterSearch_btn}>Nhắc bạn</Button>
-                  <Button
-                    style={{
-                      marginLeft: 8,
-                    }}
-                    className={styles.filterSearch_btn}
-                  >
-                    Biểu cảm
-                  </Button>
-                </div>,
-              ]}
             >
-              Không có tìm kiếm nào gần đây
-            </ProCard>
+              <img
+                width={160}
+                style={{
+                  height: 'auto',
+                }}
+                src="https://chat.zalo.me/assets/search-empty.a19dba60677c95d6539d26d2dc363e4e.png"
+              />
+            </div>
           </div>
         ) : (
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <Tabs
-              defaultActiveKey="1"
-              style={{
-                width: '100%',
-              }}
-              tabBarStyle={{
-                padding: '0 16px',
-                marginBottom: 0,
-              }}
-            >
-              <Tabs.TabPane
-                tab="Tất cả"
-                key="1"
-                style={{
-                  height: 500,
-                  overflow: 'auto',
+          <>
+            <div className={styles.chat__action} onClick={(e) => e.stopPropagation()}>
+              <div
+                onClick={() => {
+                  setHasChange(true);
+                  setIsFocus(true);
                 }}
               >
-                <ConversationList />
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="Chưa đọc" key="2">
-                <ConversationList children />
-              </Tabs.TabPane>
+                <Input
+                  placeholder="Tìm kiếm"
+                  className={styles.chat__search}
+                  bordered={false}
+                  prefix={<i className="fa-solid fa-magnifying-glass"></i>}
+                  style={{
+                    backgroundColor: isFocus ? '#fff' : '#eaedf0',
+                    border: isFocus ? '1px solid #0068ff' : '',
+                    width: '100%',
+                  }}
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  allowClear
+                />
+              </div>
+              {hasChange ? (
+                <Button
+                  className={styles.chat_btn}
+                  onClick={() => {
+                    setHasChange(false);
+                    setIsFocus(false);
+                    setSearchInput('');
+                  }}
+                >
+                  Đóng
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    className={styles.chat_btn}
+                    icon={<i className="fa-solid fa-user-plus"></i>}
+                  />
+                  <Button
+                    className={styles.chat_btn}
+                    icon={<i className="fa-solid fa-user-plus"></i>}
+                  />
+                </>
+              )}
+            </div>
 
-              <Tabs.TabPane
-                tab={
-                  <Dropdown
-                    // menu={{ items }}
-                    overlay={<h1>a</h1>}
-                    trigger={['click']}
+            {hasChange ? (
+              searchInput ? (
+                <SearchResult />
+              ) : (
+                <div>
+                  <ProCard
+                    title="Tìm gần đây"
+                    style={{
+                      padding: '0 16px',
+                    }}
+                    headStyle={{
+                      padding: 0,
+                    }}
+                    bodyStyle={{
+                      padding: '24px 0',
+                    }}
+                    actions={[
+                      <div
+                        style={{
+                          float: 'left',
+                        }}
+                      >
+                        <h4
+                          style={{
+                            textAlign: 'left',
+                            marginBottom: 14,
+                          }}
+                        >
+                          Lọc tin nhắn
+                        </h4>
+                        <Button className={styles.filterSearch_btn}>Nhắc bạn</Button>
+                        <Button
+                          style={{
+                            marginLeft: 8,
+                          }}
+                          className={styles.filterSearch_btn}
+                        >
+                          Biểu cảm
+                        </Button>
+                      </div>,
+                    ]}
                   >
-                    <a onClick={(e) => e.preventDefault()}>
-                      <Space>
-                        Click me
-                        <DownOutlined />
-                      </Space>
-                    </a>
-                  </Dropdown>
-                }
-              />
-              {/* <Tabs.TabPane
-                tab={<Button size="small" shape="circle" icon={<SmallDashOutlined />} />}
-              /> */}
-            </Tabs>
-          </div>
+                    Không có tìm kiếm nào gần đây
+                  </ProCard>
+                </div>
+              )
+            ) : (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Tabs
+                  defaultActiveKey="1"
+                  style={{
+                    width: '100%',
+                  }}
+                  tabBarStyle={{
+                    padding: '0 16px',
+                    marginBottom: 0,
+                  }}
+                  tabBarExtraContent={
+                    <>
+                      <Dropdown menu={{ items }} trigger={['click']}>
+                        <Button
+                          size="small"
+                          shape="round"
+                          style={{
+                            padding: '0 6px',
+                          }}
+                          children={
+                            <span>
+                              Phân loại
+                              <DownOutlined style={{ marginLeft: 6 }} />
+                            </span>
+                          }
+                          className={styles.type_btn}
+                        />
+                      </Dropdown>
+                      <Dropdown
+                        menu={{
+                          items: moreItems,
+                        }}
+                        trigger={['click']}
+                      >
+                        <Button
+                          size="small"
+                          shape="circle"
+                          style={{
+                            padding: 4,
+                            marginLeft: 4,
+                          }}
+                          icon={<EllipsisOutlined />}
+                          className={styles.more_btn}
+                        />
+                      </Dropdown>
+                    </>
+                  }
+                >
+                  <Tabs.TabPane
+                    tab="Tất cả"
+                    key="1"
+                    style={{
+                      height: 600,
+                      overflow: 'auto',
+                    }}
+                  >
+                    <ConversationList />
+                  </Tabs.TabPane>
+                  <Tabs.TabPane tab="Chưa đọc" key="2">
+                    <ConversationList isUnRead />
+                  </Tabs.TabPane>
+                </Tabs>
+              </div>
+            )}
+          </>
         )}
       </ProCard>
     </ProCard>

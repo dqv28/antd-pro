@@ -1,8 +1,6 @@
+import { Avatar, Button, Tabs, Typography } from 'antd';
 import React from 'react';
-import { ProList } from '@ant-design/pro-components';
-import styles from './index.less';
-import { Avatar, Typography } from 'antd';
-import { Loading3QuartersOutlined } from '@ant-design/icons';
+import Result from './Result';
 
 const { Text } = Typography;
 
@@ -93,97 +91,42 @@ const mockListConversation = () => {
   });
 };
 
-const ConversationList: React.FC<any> = ({ isUnRead }) => {
+const SearchResult: React.FC = () => {
   return (
     <>
-      <ProList<any>
-        cardProps={{
-          bodyStyle: {
-            padding: 0,
-          },
-        }}
-        onItem={() => ({
-          className: styles.cns_item,
-        })}
-        rowKey="id"
-        request={async () => {
-          let data;
-          const res = await mockListConversation();
-
-          if (!isUnRead) {
-            data = res;
-          }
-
-          data = res.filter((cns: any) => cns.isRead !== isUnRead);
-
-          return {
-            data,
-          };
-        }}
-        metas={{
-          title: {
-            dataIndex: 'name',
-            render: (_, record) => (
-              <span
-                className={styles.cns_title}
-                style={{
-                  fontWeight: record.isRead ? 450 : 600,
-                }}
-              >
-                <Text
-                  ellipsis
-                  style={{
-                    flex: 1,
-                  }}
-                >
-                  {record.name}
-                </Text>
-                <span
-                  style={{
-                    fontSize: 12,
-                    minWidth: '40px',
-                  }}
-                >
-                  38 phút
-                </span>
-              </span>
-            ),
-          },
-          avatar: {
-            dataIndex: 'image',
-            render: (_, record) => <Avatar src={record.image} size={50} />,
-          },
-          description: {
-            dataIndex: 'desc',
-            render: (_, record) => (
-              <span className={styles.cns_desc_wrapper}>
-                <Text
-                  ellipsis
-                  style={{
-                    color: record.isRead ? '#7589a3' : '#081c36',
-                    flex: 1,
-                  }}
-                >
-                  {record.desc}
-                </Text>
-                <span className={styles.cns_desc_bagde}>{record.isRead || '5+'}</span>
-              </span>
-            ),
-          },
-        }}
-      />
-
-      {/* <span
+      <Tabs
+        defaultActiveKey="1"
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          width: '100%',
+        }}
+        tabBarStyle={{
+          padding: '0 16px',
+          marginBottom: 0,
         }}
       >
-        <Loading3QuartersOutlined spin />
-      </span> */}
+        <Tabs.TabPane
+          tab="Tất cả"
+          key="1"
+          style={{
+            height: 600,
+            overflow: 'auto',
+          }}
+        >
+          <Result />
+        </Tabs.TabPane>
+        <Tabs.TabPane
+          tab="Trò chuyện"
+          key="2"
+          style={{
+            height: 600,
+            overflow: 'auto',
+          }}
+        >
+          <Result isUnRead />
+        </Tabs.TabPane>
+      </Tabs>
     </>
   );
 };
 
-export default ConversationList;
+export default SearchResult;

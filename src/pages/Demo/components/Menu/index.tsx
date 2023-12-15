@@ -1,10 +1,13 @@
 import {
-  CaretRightOutlined,
   DownOutlined,
   EllipsisOutlined,
   MessageOutlined,
+  SearchOutlined,
+  TagFilled,
+  UserAddOutlined,
+  UsergroupAddOutlined,
 } from '@ant-design/icons';
-import { ProCard, ProList } from '@ant-design/pro-components';
+import { ProCard, ProFormText } from '@ant-design/pro-components';
 import { Avatar, Badge, Button, Dropdown, Input, Tabs, Typography } from 'antd';
 import type { MenuProps } from 'antd';
 import React, { useState } from 'react';
@@ -12,41 +15,43 @@ import ConversationList from '../ConversationList';
 
 import styles from './index.less';
 import SearchResult from './MenuComp/SearchResult';
+import MsgResult from './MenuComp/MsgResult/MsgResult';
 
 type Props = {
   search?: boolean;
+  searchMsgInput?: string;
 };
 
 const items: MenuProps['items'] = [
   {
     label: 'Khách hàng',
     key: '1',
-    icon: <CaretRightOutlined style={{ color: 'rgb(217, 27, 27)' }} />,
+    icon: <TagFilled style={{ color: 'rgb(217, 27, 27)' }} />,
   },
   {
     label: 'Gia đình',
     key: '2',
-    icon: <CaretRightOutlined style={{ color: 'rgb(243, 27, 200)' }} />,
+    icon: <TagFilled style={{ color: 'rgb(243, 27, 200)' }} />,
   },
   {
     label: 'Công việc',
     key: '3',
-    icon: <CaretRightOutlined style={{ color: 'rgb(255, 105, 5)' }} />,
+    icon: <TagFilled style={{ color: 'rgb(255, 105, 5)' }} />,
   },
   {
     label: 'Bạn bè',
     key: '4',
-    icon: <CaretRightOutlined style={{ color: 'rgb(250, 192, 0)' }} />,
+    icon: <TagFilled style={{ color: 'rgb(250, 192, 0)' }} />,
   },
   {
     label: 'Trả lời sau',
     key: '5',
-    icon: <CaretRightOutlined style={{ color: 'rgb(75, 195, 119)' }} />,
+    icon: <TagFilled style={{ color: 'rgb(75, 195, 119)' }} />,
   },
   {
     label: 'Đồng nghiệp',
     key: '6',
-    icon: <CaretRightOutlined style={{ color: 'rgb(0, 104, 255)' }} />,
+    icon: <TagFilled style={{ color: 'rgb(0, 104, 255)' }} />,
   },
   {
     type: 'divider',
@@ -59,11 +64,11 @@ const items: MenuProps['items'] = [
 
 const moreItems: MenuProps['items'] = [
   {
-    label: <a href="https://www.antgroup.com">Đánh dấu đã đọc</a>,
+    label: 'Đánh dấu đã đọc',
     key: '0',
   },
   {
-    label: <a href="https://www.aliyun.com">Gửi tin đồng thời</a>,
+    label: 'Gửi tin đồng thời',
     key: '1',
   },
   {
@@ -82,16 +87,16 @@ const Menu: React.FC<any> = (props: Props) => {
   const [hasChange, setHasChange] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState<string>('');
 
-  const [current, setCurrent] = useState('mail');
-
   return (
-    <ProCard bodyStyle={{ padding: 0 }}>
+    <ProCard direction="row" style={{ height: '100%' }} bodyStyle={{ padding: 0 }}>
       <ProCard
         colSpan={4}
+        style={{
+          height: '100%',
+        }}
         bodyStyle={{
           padding: '32px 0 0',
           backgroundColor: '#0091ff',
-          height: '100vh',
           textAlign: 'center',
         }}
       >
@@ -135,26 +140,45 @@ const Menu: React.FC<any> = (props: Props) => {
         }}
       >
         {props.search ? (
-          <div style={{ padding: '20px 16px' }}>
-            <Title level={5} children="Kết quả tìm kiếm" />
-            <Text children="Nhập nội dung cần tìm trong hội thoại" />
+          <div style={{ padding: '20px 0' }}>
+            <Title level={5} children="Kết quả tìm kiếm" style={{ padding: '0 16px' }} />
+            <Text
+              children={
+                props.searchMsgInput
+                  ? 'Danh sách kết quả phù hợp trong hội thoại'
+                  : 'Nhập nội dung cần tìm trong hội thoại'
+              }
+              style={{ padding: '0 16px', width: '100%' }}
+            />
 
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginTop: 60,
-              }}
-            >
-              <img
-                width={160}
+            {props.searchMsgInput ? (
+              <div
                 style={{
-                  height: 'auto',
+                  height: 640,
+                  overflow: 'auto',
+                  marginTop: 16,
                 }}
-                src="https://chat.zalo.me/assets/search-empty.a19dba60677c95d6539d26d2dc363e4e.png"
-              />
-            </div>
+              >
+                <MsgResult />
+              </div>
+            ) : (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginTop: 60,
+                }}
+              >
+                <img
+                  width={160}
+                  style={{
+                    height: 'auto',
+                  }}
+                  src="https://chat.zalo.me/assets/search-empty.a19dba60677c95d6539d26d2dc363e4e.png"
+                />
+              </div>
+            )}
           </div>
         ) : (
           <>
@@ -164,20 +188,26 @@ const Menu: React.FC<any> = (props: Props) => {
                   setHasChange(true);
                   setIsFocus(true);
                 }}
+                style={{
+                  height: 30,
+                  flex: 1,
+                }}
               >
-                <Input
+                <ProFormText
                   placeholder="Tìm kiếm"
                   className={styles.chat__search}
-                  bordered={false}
-                  prefix={<i className="fa-solid fa-magnifying-glass"></i>}
-                  style={{
-                    backgroundColor: isFocus ? '#fff' : '#eaedf0',
-                    border: isFocus ? '1px solid #0068ff' : '',
-                    width: '100%',
+                  fieldProps={{
+                    prefix: <SearchOutlined />,
+                    onChange: (e) => setSearchInput(e.target.value),
+                    value: searchInput,
+                    bordered: false,
+                    style: {
+                      backgroundColor: isFocus ? '#fff' : '#eaedf0',
+                      border: isFocus ? '1px solid #0068ff' : '',
+                      width: '100%',
+                      borderRadius: '6px',
+                    },
                   }}
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  allowClear
                 />
               </div>
               {hasChange ? (
@@ -193,13 +223,11 @@ const Menu: React.FC<any> = (props: Props) => {
                 </Button>
               ) : (
                 <>
+                  <Button className={styles.chat_btn} icon={<UserAddOutlined />} title="Thêm bạn" />
                   <Button
                     className={styles.chat_btn}
-                    icon={<i className="fa-solid fa-user-plus"></i>}
-                  />
-                  <Button
-                    className={styles.chat_btn}
-                    icon={<i className="fa-solid fa-user-plus"></i>}
+                    icon={<UsergroupAddOutlined />}
+                    title="Tạo nhóm chat"
                   />
                 </>
               )}
@@ -252,13 +280,7 @@ const Menu: React.FC<any> = (props: Props) => {
                 </div>
               )
             ) : (
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
+              <>
                 <Tabs
                   defaultActiveKey="1"
                   style={{
@@ -310,7 +332,7 @@ const Menu: React.FC<any> = (props: Props) => {
                     tab="Tất cả"
                     key="1"
                     style={{
-                      height: 600,
+                      height: '600px',
                       overflow: 'auto',
                     }}
                   >
@@ -320,7 +342,7 @@ const Menu: React.FC<any> = (props: Props) => {
                     <ConversationList isUnRead />
                   </Tabs.TabPane>
                 </Tabs>
-              </div>
+              </>
             )}
           </>
         )}

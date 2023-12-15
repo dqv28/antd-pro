@@ -83,3 +83,34 @@ export async function removeRule(options?: { [key: string]: any }) {
     ...(options || {}),
   });
 }
+
+export type Msg = {
+  id: string;
+  name: string;
+  image: string;
+  desc: string;
+};
+
+export async function listMsg(): Promise<Msg[]> {
+  const data = localStorage.getItem('Messages');
+
+  if (data === null) {
+    return [];
+  }
+
+  return JSON.parse(data);
+}
+
+export async function sendMsg(newCnsMsg: Msg): Promise<Msg> {
+  const data = localStorage.getItem('Messages');
+
+  if (data === null) {
+    localStorage.setItem('Messages', JSON.stringify([newCnsMsg]));
+    return newCnsMsg;
+  }
+
+  const oldCnsMsg = JSON.parse(data);
+  localStorage.setItem('Messages', JSON.stringify([...oldCnsMsg, newCnsMsg]));
+
+  return newCnsMsg;
+}

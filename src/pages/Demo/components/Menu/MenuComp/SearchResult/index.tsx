@@ -1,6 +1,6 @@
 import { Avatar, Button, Tabs, Typography } from 'antd';
 import React from 'react';
-import Result from './Result';
+import CnsResult from './CnsResult';
 
 const { Text } = Typography;
 
@@ -112,7 +112,7 @@ const SearchResult: React.FC = () => {
             overflow: 'auto',
           }}
         >
-          <Result />
+          <CnsResult />
         </Tabs.TabPane>
         <Tabs.TabPane
           tab="Trò chuyện"
@@ -122,7 +122,17 @@ const SearchResult: React.FC = () => {
             overflow: 'auto',
           }}
         >
-          <Result isUnRead />
+          <CnsResult isConversation />
+        </Tabs.TabPane>
+        <Tabs.TabPane
+          tab="Tin nhắn"
+          key="3"
+          style={{
+            height: 600,
+            overflow: 'auto',
+          }}
+        >
+          <CnsResult isMsg />
         </Tabs.TabPane>
       </Tabs>
     </>

@@ -1,12 +1,15 @@
 .pro_card_content {
+  width: 100%;
+  height: 100%;
+
   :global(.ant-pro-card-title) {
     display: flex;
     align-items: center;
-    width: 100%;
   }
-  position: relative;
-  flex: 1;
-  height: 100vh;
+
+  :global(.ant-pro-card-actions li) {
+    margin: 0;
+  }
 }
 
 .head_action {
@@ -57,7 +60,7 @@
 }
 
 .modal_body {
-  height: 460px;
+  height: 60vh;
   margin-top: 20px;
   overflow: auto;
   border-top: 1px solid rgba(0, 0, 0, 0.06);

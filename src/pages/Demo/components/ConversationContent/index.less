@@ -12,27 +12,28 @@
 .cns_topic {
   position: absolute;
   top: 0;
-  right: 0;
-  left: 0;
   z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: @topic-height;
+  width: 100%;
+  min-height: @topic-height;
   padding: 8px 16px;
   background-color: #fff;
+  box-shadow: 0 3px 10px -1px rgba(0; 0; 0; 0.1);
 
   &:hover .cns_topic_more {
     display: inline-block;
   }
 }
 
-.cns_topic_msg {
-  width: 99%;
-  margin-left: 12px;
+.cns_topic_action {
+  display: flex;
+  align-items: center;
+  min-width: 50px;
+  margin-left: 16px;
 }
 
-.cns_topic_action {
+.cns_topic_msg {
+  flex: 1;
+  margin-left: 12px;
 }
 
 .cns_topic_more {
@@ -40,6 +41,17 @@
   border-radius: 50%;
   &:hover {
     background-color: #dfe2e7;
+  }
+}
+
+.cns_msg_search {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  :global(.ant-form-item) {
+    flex: 1;
+    margin-bottom: 0;
   }
 }
 
@@ -62,10 +74,28 @@
   height: @tool-bar-height;
   padding: 4px 8px;
   background-color: #fff;
+  border-top: 1px solid #d6dbe1;
 }
 
 .cns_toolbars_btn {
   padding: 10px;
+
+  &:hover {
+    background-color: #dfe2e7;
+  }
+}
+
+.cns_search_btn {
+  margin-left: 8px;
+
+  &:hover {
+    background-color: #eaedf0;
+  }
+}
+
+.cns_filter_btn {
+  margin-left: 12px;
+  background-color: #eaedf0;
 
   &:hover {
     background-color: #dfe2e7;

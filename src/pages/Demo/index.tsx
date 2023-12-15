@@ -100,6 +100,7 @@ const Demo: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [search, setSearch] = useState(false);
+  const [searchMsgInput, setSearchMsgInput] = useState<string>('');
   const rowSelection = {
     selectedRowKeys,
     onChange: (keys: Key[]) => setSelectedRowKeys(keys),
@@ -118,18 +119,23 @@ const Demo: React.FC = () => {
       direction="row"
       bodyStyle={{
         padding: '0',
-        height: '100vh',
+        minHeight: '100vh',
         overflow: 'hidden',
       }}
     >
-      <ProCard direction="row" colSpan={7} bodyStyle={{ padding: '0' }} bordered>
-        <Menu search={search} />
+      <ProCard
+        direction="row"
+        colSpan={7}
+        style={{ height: '100%' }}
+        bodyStyle={{ padding: '0' }}
+        bordered
+      >
+        <Menu search={search} searchMsgInput={searchMsgInput} />
       </ProCard>
       <ProCard
         className={styles.pro_card_content}
-        headerBordered
         title={<Header />}
-        bordered
+        headerBordered
         actions={[<Footer />]}
         extra={
           <Space>
@@ -143,6 +149,7 @@ const Demo: React.FC = () => {
             <Button
               onClick={() => {
                 setSearch(!search);
+                setSearchMsgInput('');
               }}
               className={styles.head_action}
               type="text"
@@ -177,11 +184,17 @@ const Demo: React.FC = () => {
           src="https://ava-grp-talk.zadn.vn/2/7/4/b/2/360/a8e4edcbf5d655b3080b2d5ad6c1dccd.jpg"
           className={styles.cns_background}
         />
-        <ConversationContent />
+        <ConversationContent
+          search={search}
+          onClick={() => {
+            setSearch(false);
+            setSearchMsgInput('');
+          }}
+          onChange={(inputStr: any) => setSearchMsgInput(inputStr)}
+        />
       </ProCard>
-
       <ProCard colSpan={0} bordered>
-        colSpan-6
+        Thông tin nhóm
       </ProCard>
 
       <Modal

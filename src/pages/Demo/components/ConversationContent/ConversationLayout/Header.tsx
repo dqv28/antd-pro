@@ -1,7 +1,7 @@
 import type { MenuProps } from 'antd';
 import { Avatar, Button, Dropdown, Typography } from 'antd';
 import React from 'react';
-import { CaretRightOutlined, UserOutlined } from '@ant-design/icons';
+import { TagFilled, TagOutlined, UserOutlined } from '@ant-design/icons';
 
 import styles from './Layut.less';
 
@@ -10,32 +10,32 @@ const items: MenuProps['items'] = [
   {
     label: 'Khách hàng',
     key: '1',
-    icon: <CaretRightOutlined style={{ color: 'rgb(217, 27, 27)' }} />,
+    icon: <TagFilled style={{ color: 'rgb(217, 27, 27)' }} />,
   },
   {
     label: 'Gia đình',
     key: '2',
-    icon: <CaretRightOutlined style={{ color: 'rgb(243, 27, 200)' }} />,
+    icon: <TagFilled style={{ color: 'rgb(243, 27, 200)' }} />,
   },
   {
     label: 'Công việc',
     key: '3',
-    icon: <CaretRightOutlined style={{ color: 'rgb(255, 105, 5)' }} />,
+    icon: <TagFilled style={{ color: 'rgb(255, 105, 5)' }} />,
   },
   {
     label: 'Bạn bè',
     key: '4',
-    icon: <CaretRightOutlined style={{ color: 'rgb(250, 192, 0)' }} />,
+    icon: <TagFilled style={{ color: 'rgb(250, 192, 0)' }} />,
   },
   {
     label: 'Trả lời sau',
     key: '5',
-    icon: <CaretRightOutlined style={{ color: 'rgb(75, 195, 119)' }} />,
+    icon: <TagFilled style={{ color: 'rgb(75, 195, 119)' }} />,
   },
   {
     label: 'Đồng nghiệp',
     key: '6',
-    icon: <CaretRightOutlined style={{ color: 'rgb(0, 104, 255)' }} />,
+    icon: <TagFilled style={{ color: 'rgb(0, 104, 255)' }} />,
   },
   {
     type: 'divider',
@@ -68,7 +68,7 @@ const Header: React.FC = () => {
           />
 
           <Dropdown menu={{ items }} trigger={['click']}>
-            <CaretRightOutlined title="Phân loại" className={styles.type_icon} />
+            <TagOutlined title="Phân loại" className={styles.type_icon} />
           </Dropdown>
         </div>
       </div>

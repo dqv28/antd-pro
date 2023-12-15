@@ -1,19 +1,23 @@
 import { AtIcon, MsgIcon } from '@/components/Icons';
 import { LikeOutlined, SmileOutlined } from '@ant-design/icons';
 import { Button, Input, Space } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import styles from './Layut.less';
 import { sendMsg } from '@/services/ant-design-pro/api';
 
 const Footer: React.FC = () => {
-  const handleSendMsg = async (e: any) => {
+  const [mesg, setMesg] = useState<any>('');
+  const handleSendMsg = async () => {
     await sendMsg({
       id: '1',
-      name: 'abc',
-      image: 'anbc',
-      desc: e.target.value,
+      name: 'Ant Design',
+      image:
+        'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
+      desc: !mesg.startsWith('@') ? mesg : mesg.slice(1),
+      mine: !mesg.startsWith('@'),
     });
+    setMesg('');
   };
 
   return (
@@ -21,13 +25,15 @@ const Footer: React.FC = () => {
       <Input
         className={styles.cns_input_msg}
         placeholder="Nhập @, tin nhắn tới  Nhóm"
+        value={mesg}
+        onChange={(e) => setMesg(e.target.value)}
         onKeyUp={(e: any) => {
           if (e && e.key === 'Enter') {
-            handleSendMsg(e);
+            handleSendMsg();
           }
         }}
       />
-      <div style={{ width: '20%' }}>
+      <div style={{ minWidth: '20%' }}>
         <Button
           className={styles.cns_btn_msg}
           size="large"

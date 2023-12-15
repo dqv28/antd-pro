@@ -89,6 +89,7 @@ export type Msg = {
   name: string;
   image: string;
   desc: string;
+  mine?: boolean;
 };
 
 export async function listMsg(): Promise<Msg[]> {

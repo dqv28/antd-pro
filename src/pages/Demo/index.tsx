@@ -14,6 +14,7 @@ import {
   TabletOutlined,
 } from '@ant-design/icons';
 import Header from './components/ConversationContent/ConversationLayout/Header';
+import InfomationGroup from './components/infomationGroup';
 
 const defaultData = [
   {
@@ -136,6 +137,7 @@ const Demo: React.FC = () => {
         className={styles.pro_card_content}
         title={<Header />}
         headerBordered
+        bordered
         actions={[<Footer />]}
         extra={
           <Space>
@@ -176,9 +178,7 @@ const Demo: React.FC = () => {
           opacity: 0.85,
           padding: 0,
         }}
-        headStyle={{
-          padding: 16,
-        }}
+        headStyle={{ padding: '0 16px', height: '100px' }}
       >
         <img
           src="https://ava-grp-talk.zadn.vn/2/7/4/b/2/360/a8e4edcbf5d655b3080b2d5ad6c1dccd.jpg"
@@ -193,9 +193,21 @@ const Demo: React.FC = () => {
           onChange={(inputStr: any) => setSearchMsgInput(inputStr)}
         />
       </ProCard>
-      <ProCard colSpan={0} bordered>
-        Thông tin nhóm
-      </ProCard>
+      <ProCard
+        colSpan={6}
+        headerBordered
+        bordered
+        title={<span style={{ fontSize: 18 }}>Thông tin nhóm</span>}
+        bodyStyle={{ padding: 0 }}
+        headStyle={{
+          padding: 0,
+          height: 81,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        children={<InfomationGroup />}
+      ></ProCard>
 
       <Modal
         title="Thêm thành viên"

@@ -50,6 +50,7 @@
     "@ant-design/icons": "^4.7.0",
     "@ant-design/pro-components": "^1.1.16",
     "@umijs/route-utils": "^2.0.0",
+    "ahooks": "^3.7.8",
     "antd": "^4.24.0",
     "classnames": "^2.3.0",
     "firebase": "^10.7.0",

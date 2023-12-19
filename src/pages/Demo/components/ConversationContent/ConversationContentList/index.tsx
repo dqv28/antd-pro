@@ -23,6 +23,10 @@ type Props = {
 const emojis = [
   {
     id: 1,
+    icon: <PandaIcon style={{ color: '#eb2926', fontSize: 16, lineHeight: '24px' }} />,
+  },
+  {
+    id: 2,
     icon: <HeartIcon style={{ color: '#eb2926', fontSize: 16, lineHeight: '24px' }} />,
   },
 ];
@@ -32,10 +36,15 @@ const ConversationContentList: React.FC<any> = (props: Props) => {
   const [totalMsg, setTotalMsg] = useState(10);
   const [heartIcon, setHeartIcon] = useState(false);
   const actionRef: any = useRef();
+  const cnsRef: any = useRef(null);
 
   useEffect(() => {
     actionRef?.current?.reload();
-  }, [heartIcon || props.cnsMessage || totalMsg]);
+  }, [heartIcon, props.cnsMessage, totalMsg]);
+
+  useEffect(() => {
+    cnsRef.current.scrollIntoView({ behavior: 'smooth' });
+  }, [props.cnsMessage]);
 
   const loadMoreData = () => {
     setTotalMsg((prevTotal: number) => prevTotal + 5);
@@ -47,9 +56,9 @@ const ConversationContentList: React.FC<any> = (props: Props) => {
     fetchMsgApi();
   };
 
-  const sendEmot = (id: number) => {
+  const sendEmot = ({ id, emotId }: any) => {
     const emoticon = async () => {
-      await sendEmoticon(id).then(() => {
+      await sendEmoticon(id, emotId).then(() => {
         setHeartIcon(!heartIcon);
       });
     };
@@ -82,7 +91,7 @@ const ConversationContentList: React.FC<any> = (props: Props) => {
       <InfiniteScroll
         dataLength={msgData.length}
         next={loadMoreData}
-        hasMore={totalMsg < 21}
+        hasMore={totalMsg < 50}
         loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
         endMessage=""
         scrollableTarget="scrollableDiv"
@@ -97,112 +106,121 @@ const ConversationContentList: React.FC<any> = (props: Props) => {
             };
           }}
           actionRef={actionRef}
-          renderItem={(msg: Msg) => (
-            <div
-              className={styles.msg_list_item}
-              style={{
-                display: 'flex',
-                justifyContent: msg.mine ? '' : 'normal',
-                flexDirection: msg.mine ? 'row-reverse' : 'row',
-              }}
-            >
-              {!msg.mine && (
-                <Avatar src={msg.image} size={44} style={{ border: '1px solid #fff' }} />
-              )}
-              <ProCard
-                className={styles.content_item}
-                title={!msg.mine && msg.name}
-                bordered
-                style={{ backgroundColor: msg.mine ? '#e5efff' : '#fff' }}
-                children={
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    {msg.desc} {(msg.emoji && <PandaIcon style={{ fontSize: 30 }} />) || ''}
-                    <span style={{ fontSize: 12, color: '#476285', marginTop: 8 }}>21:44</span>
-                    {msg.emoticon > 0 ? (
-                      <Button
-                        size="small"
-                        type="text"
-                        className={styles.heart_icon}
-                        icon={<HeartIcon style={{ color: '#eb2926', fontSize: 14 }} />}
-                        children={
-                          <span style={{ marginLeft: 1, fontSize: 14 }}>{msg.emoticon}</span>
-                        }
-                      />
-                    ) : (
-                      <Button
-                        size="small"
-                        shape="circle"
-                        type="text"
-                        className={styles.like_icon}
-                        icon={<LikeOutlined />}
-                      />
-                    )}
-                    <Space className={styles.emoji_group}>
-                      {emojis.map((emoji: any) => (
-                        <Button
-                          className={styles.emoji_item}
-                          onClick={() => {
-                            sendEmot(msg.id);
-                          }}
-                          type="text"
-                          size="small"
-                          children={emoji.icon}
-                        />
-                      ))}
-
-                      {msg.emoticon > 0 && (
-                        <Button
-                          className={styles.emoji_item}
-                          onClick={() => {
-                            resetEmot(msg.id);
-                          }}
-                          type="text"
-                          size="small"
-                          icon={<CloseOutlined />}
-                        />
-                      )}
-                    </Space>
-                  </div>
-                }
-                bodyStyle={{ padding: '4px 12px 12px', fontSize: 15, color: '#081c36' }}
-                headStyle={{ padding: '0 12px' }}
-              />
+          renderItem={(msg: Msg) => {
+            return (
               <div
-                className={styles.msg_btn_group_wrapper}
+                className={styles.msg_list_item}
                 style={{
                   display: 'flex',
-                  alignItems: 'end',
+                  justifyContent: msg.mine ? '' : 'normal',
+                  flexDirection: msg.mine ? 'row-reverse' : 'row',
                 }}
               >
-                <Space className={styles.msg_btn_group}>
-                  <Button
-                    className={styles.msg_action}
-                    type="text"
-                    size="small"
-                    children={<QuoteIcon className={styles.msg_icon} />}
-                  />
-                  <Button
-                    className={styles.msg_action}
-                    type="text"
-                    size="small"
-                    children={<ShareIcon className={styles.msg_icon} />}
-                  />
-                  <Button
-                    className={styles.msg_action}
-                    type="text"
-                    size="small"
-                    children={<SquareCheckIcon className={styles.msg_icon} />}
-                  />
-                  <Button
-                    className={styles.msg_action}
-                    type="text"
-                    size="small"
-                    children={<EllipsisIcon className={styles.msg_icon} />}
-                  />
-                </Space>
+                {!msg.mine && (
+                  <Avatar src={msg.image} size={44} style={{ border: '1px solid #fff' }} />
+                )}
+                <ProCard
+                  className={styles.content_item}
+                  title={!msg.mine && msg.name}
+                  bordered
+                  style={{ backgroundColor: msg.mine ? '#e5efff' : '#fff' }}
+                  children={
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      {msg.desc} {(msg.emoji && <PandaIcon style={{ fontSize: 30 }} />) || ''}
+                      <span style={{ fontSize: 12, color: '#476285', marginTop: 8 }}>21:44</span>
+                      {msg.emoticon > 0 ? (
+                        <Button
+                          size="small"
+                          type="text"
+                          className={styles.heart_icon}
+                          icon={emojis.map(
+                            (emojis: any) => emojis.id === msg.emotId && emojis.icon,
+                          )}
+                          children={
+                            <span style={{ marginLeft: 2, fontSize: 14 }}>{msg.emoticon}</span>
+                          }
+                        />
+                      ) : (
+                        <Button
+                          size="small"
+                          shape="circle"
+                          type="text"
+                          className={styles.like_icon}
+                          icon={<LikeOutlined />}
+                          onClick={() => {
+                            sendEmot({ id: msg.id, emotId: 1 });
+                          }}
+                        />
+                      )}
+                      <Space className={styles.emoji_group}>
+                        {emojis
+                          .sort((a, b) => b.id - a.id)
+                          .map((emoji: any) => (
+                            <Button
+                              className={styles.emoji_item}
+                              onClick={() => {
+                                sendEmot({ id: msg.id, emotId: emoji.id });
+                              }}
+                              type="text"
+                              size="small"
+                              children={emoji.icon}
+                            />
+                          ))}
+
+                        {msg.emoticon > 0 && (
+                          <Button
+                            className={styles.emoji_item}
+                            onClick={() => {
+                              resetEmot(msg.id);
+                            }}
+                            type="text"
+                            size="small"
+                            icon={<CloseOutlined />}
+                          />
+                        )}
+                      </Space>
+                    </div>
+                  }
+                  bodyStyle={{ padding: '4px 12px 12px', fontSize: 15, color: '#081c36' }}
+                  headStyle={{ padding: '0 12px' }}
+                />
+                <div
+                  className={styles.msg_btn_group_wrapper}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'end',
+                  }}
+                >
+                  <Space className={styles.msg_btn_group}>
+                    <Button
+                      className={styles.msg_action}
+                      type="text"
+                      size="small"
+                      children={<QuoteIcon className={styles.msg_icon} />}
+                    />
+                    <Button
+                      className={styles.msg_action}
+                      type="text"
+                      size="small"
+                      children={<ShareIcon className={styles.msg_icon} />}
+                    />
+                    <Button
+                      className={styles.msg_action}
+                      type="text"
+                      size="small"
+                      children={<SquareCheckIcon className={styles.msg_icon} />}
+                    />
+                    <Button
+                      className={styles.msg_action}
+                      type="text"
+                      size="small"
+                      children={<EllipsisIcon className={styles.msg_icon} />}
+                    />
+                  </Space>
+                </div>
               </div>
-            </div>
-          )}
+            );
+          }}
           cardProps={{
             bodyStyle: {
               padding: 0,
@@ -211,6 +229,7 @@ const ConversationContentList: React.FC<any> = (props: Props) => {
               backgroundColor: 'transparent',
             },
           }}
+          footer={<div ref={cnsRef} />}
         />
       </InfiniteScroll>
     </>

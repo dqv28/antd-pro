@@ -1,6 +1,6 @@
 import RightContent from '@/components/RightContent';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
-import { PageLoading, SettingDrawer } from '@ant-design/pro-components';
+import { PageLoading } from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig } from 'umi';
 import { history } from 'umi';
 import defaultSettings from '../config/defaultSettings';
@@ -80,7 +80,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       content: '',
     },
     menuHeaderRender: undefined,
-
+    siderWidth: 48,
     childrenRender: (children: any, props: any) => {
       if (!initialState?.currentUser) {
         return;

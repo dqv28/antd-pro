@@ -36,6 +36,7 @@ const Footer: React.FC<any> = (props: Props) => {
       mine: !mesg.startsWith('@'),
       emoji,
       emoticon: 0,
+      emotId: 0,
     });
     setMesg('');
   };

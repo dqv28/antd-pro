@@ -92,6 +92,7 @@ export type Msg = {
   mine?: boolean;
   emoji?: any;
   emoticon: number;
+  emotId: number;
 };
 
 export async function listMsg(totalMsg: number): Promise<Msg[]> {
@@ -120,7 +121,7 @@ export async function sendMsg(newCnsMsg: Msg): Promise<Msg> {
   return newCnsMsg;
 }
 
-export async function sendEmoticon(id: number) {
+export async function sendEmoticon(id: number, emotId: number) {
   const data = localStorage.getItem('Messages');
 
   if (!data) {
@@ -130,6 +131,8 @@ export async function sendEmoticon(id: number) {
   const cnsMsg = JSON.parse(data);
   cnsMsg.map((msg: Msg) => {
     if (msg.id === id) {
+      msg.emotId = emotId;
+
       if (msg.emoticon === 0) {
         msg.emoticon = 1;
       } else {
@@ -154,6 +157,10 @@ export async function resetEmoticon(id: number) {
   cnsMsg.map((msg: Msg) => {
     if (msg.id === id) {
       msg.emoticon = 0;
+
+      if (msg.emoticon === 0) {
+        msg.emotId = 0;
+      }
     }
   });
 
@@ -163,9 +170,9 @@ export async function resetEmoticon(id: number) {
 }
 
 export async function getArticleList(
-  params?: {
-    limit?: number;
-    offset?: number;
+  params: {
+    limit: number;
+    offset: number;
   },
   option?: { [key: string]: any },
 ) {

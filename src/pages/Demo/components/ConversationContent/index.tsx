@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import { Button, Dropdown, MenuProps, Space, Typography } from 'antd';
 import {
   CaretDownOutlined,
@@ -17,7 +18,6 @@ import { ProFormText } from '@ant-design/pro-components';
 import ConversationContentList from './ConversationContentList';
 
 import styles from './index.less';
-import { useEffect, useRef, useState } from 'react';
 
 type Props = {
   search: boolean;

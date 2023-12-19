@@ -1,21 +1,41 @@
-import { AtIcon, MsgIcon } from '@/components/Icons';
+import { AtIcon, MsgIcon, PandaIcon } from '@/components/Icons';
 import { LikeOutlined, SmileOutlined } from '@ant-design/icons';
 import { Button, Input, Space } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styles from './Layut.less';
 import { sendMsg } from '@/services/ant-design-pro/api';
 
-const Footer: React.FC = () => {
+type Props = {
+  sendMsgInput: (msg: string) => void;
+};
+
+const Footer: React.FC<any> = (props: Props) => {
   const [mesg, setMesg] = useState<any>('');
-  const handleSendMsg = async () => {
+  const [msgData, setMsgData] = useState([]);
+
+  useEffect(() => {
+    const data = localStorage.getItem('Messages');
+
+    if (!data) {
+      return [];
+    }
+
+    setMsgData(JSON.parse(data));
+
+    return JSON.parse(data);
+  }, [mesg]);
+
+  const handleSendMsg = async (emoji?: any) => {
     await sendMsg({
-      id: '1',
+      id: msgData.length + 1,
       name: 'Ant Design',
       image:
         'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
       desc: !mesg.startsWith('@') ? mesg : mesg.slice(1),
       mine: !mesg.startsWith('@'),
+      emoji,
+      emoticon: 0,
     });
     setMesg('');
   };
@@ -26,10 +46,13 @@ const Footer: React.FC = () => {
         className={styles.cns_input_msg}
         placeholder="Nhập @, tin nhắn tới  Nhóm"
         value={mesg}
-        onChange={(e) => setMesg(e.target.value)}
+        onChange={(e) => {
+          setMesg(e.target.value);
+        }}
         onKeyUp={(e: any) => {
           if (e && e.key === 'Enter') {
             handleSendMsg();
+            props.sendMsgInput(e.target.value);
           }
         }}
       />
@@ -59,7 +82,12 @@ const Footer: React.FC = () => {
           className={styles.cns_btn_msg}
           size="large"
           type="text"
-          icon={<LikeOutlined />}
+          icon={<PandaIcon />}
+          onClick={() => {
+            handleSendMsg(true);
+            props.sendMsgInput('Like');
+            setMesg('');
+          }}
           title="Gửi nhanh biểu tượng cảm xúc"
         />
       </div>

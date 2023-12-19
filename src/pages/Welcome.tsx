@@ -13,7 +13,6 @@ const CodePreview: React.FC = ({ children }) => (
 );
 
 const Welcome: React.FC = () => {
-  
   const intl = useIntl();
 
   return (

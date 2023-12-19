@@ -26,6 +26,12 @@
     component: './Demo',
   },
   {
+    path: '/article-list',
+    name: 'Article ',
+    icon: 'smile',
+    component: './ArticleList',
+  },
+  {
     path: '/admin',
     name: 'admin',
     icon: 'crown',
@@ -54,5 +60,5 @@
   },
   {
     component: './404',
-  }
+  },
 ];

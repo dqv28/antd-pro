@@ -17,11 +17,13 @@ import { ProFormText } from '@ant-design/pro-components';
 import ConversationContentList from './ConversationContentList';
 
 import styles from './index.less';
+import { useEffect, useRef, useState } from 'react';
 
 type Props = {
   search: boolean;
   onClick: () => void;
   onChange: (inputStr: any) => string;
+  msg: string;
 };
 
 const { Title, Text } = Typography;
@@ -67,6 +69,8 @@ const items: MenuProps['items'] = [
 ];
 
 const ConversationContent: React.FC<any> = (props: Props) => {
+  const contentRef: any = useRef();
+
   return (
     <div className={styles.cns_view}>
       <div className={styles.cns_topic}>
@@ -166,8 +170,8 @@ const ConversationContent: React.FC<any> = (props: Props) => {
           </div>
         )}
       </div>
-      <div className={styles.cns_content}>
-        <ConversationContentList />
+      <div ref={contentRef} className={styles.cns_content} id="scrollableDiv">
+        <ConversationContentList cnsMessage={props.msg} />
       </div>
       <div className={styles.cns_toolbars}>
         <Space>

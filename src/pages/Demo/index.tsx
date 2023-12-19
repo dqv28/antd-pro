@@ -102,6 +102,7 @@ const Demo: React.FC = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [search, setSearch] = useState(false);
   const [searchMsgInput, setSearchMsgInput] = useState<string>('');
+  const [msgInput, setMsgInput] = useState<string>('');
   const rowSelection = {
     selectedRowKeys,
     onChange: (keys: Key[]) => setSelectedRowKeys(keys),
@@ -138,7 +139,7 @@ const Demo: React.FC = () => {
         title={<Header />}
         headerBordered
         bordered
-        actions={[<Footer />]}
+        actions={[<Footer sendMsgInput={(msg: string) => setMsgInput(msg)} />]}
         extra={
           <Space>
             <Button
@@ -186,6 +187,7 @@ const Demo: React.FC = () => {
         />
         <ConversationContent
           search={search}
+          msg={msgInput}
           onClick={() => {
             setSearch(false);
             setSearchMsgInput('');

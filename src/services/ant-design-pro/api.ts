@@ -85,21 +85,25 @@ export async function removeRule(options?: { [key: string]: any }) {
 }
 
 export type Msg = {
-  id: string;
+  id: number;
   name: string;
   image: string;
   desc: string;
   mine?: boolean;
+  emoji?: any;
+  emoticon: number;
 };
 
-export async function listMsg(): Promise<Msg[]> {
+export async function listMsg(totalMsg: number): Promise<Msg[]> {
   const data = localStorage.getItem('Messages');
 
   if (data === null) {
     return [];
   }
 
-  return JSON.parse(data);
+  const msg = JSON.parse(data).filter((_: any, index: number) => index < totalMsg);
+
+  return msg;
 }
 
 export async function sendMsg(newCnsMsg: Msg): Promise<Msg> {
@@ -114,4 +118,62 @@ export async function sendMsg(newCnsMsg: Msg): Promise<Msg> {
   localStorage.setItem('Messages', JSON.stringify([...oldCnsMsg, newCnsMsg]));
 
   return newCnsMsg;
+}
+
+export async function sendEmoticon(id: number) {
+  const data = localStorage.getItem('Messages');
+
+  if (!data) {
+    return [];
+  }
+
+  const cnsMsg = JSON.parse(data);
+  cnsMsg.map((msg: Msg) => {
+    if (msg.id === id) {
+      if (msg.emoticon === 0) {
+        msg.emoticon = 1;
+      } else {
+        msg.emoticon = msg.emoticon + 1;
+      }
+    }
+  });
+
+  localStorage.setItem('Messages', JSON.stringify([...cnsMsg]));
+
+  return cnsMsg;
+}
+
+export async function resetEmoticon(id: number) {
+  const data = localStorage.getItem('Messages');
+
+  if (!data) {
+    return [];
+  }
+
+  const cnsMsg = JSON.parse(data);
+  cnsMsg.map((msg: Msg) => {
+    if (msg.id === id) {
+      msg.emoticon = 0;
+    }
+  });
+
+  localStorage.setItem('Messages', JSON.stringify([...cnsMsg]));
+
+  return cnsMsg;
+}
+
+export async function getArticleList(
+  params?: {
+    limit?: number;
+    offset?: number;
+  },
+  option?: { [key: string]: any },
+) {
+  return await request<any>(`https://api.spaceflightnewsapi.net/v4/articles/`, {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(option || {}),
+  });
 }

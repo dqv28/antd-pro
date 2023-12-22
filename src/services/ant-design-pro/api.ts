@@ -97,12 +97,13 @@ export type Msg = {
 
 export async function listMsg(totalMsg: number): Promise<Msg[]> {
   const data = localStorage.getItem('Messages');
+  let msg;
 
   if (data === null) {
     return [];
   }
 
-  const msg = JSON.parse(data).filter((_: any, index: number) => index < totalMsg);
+  msg = JSON.parse(data).filter((_: any, index: number) => index < totalMsg);
 
   return msg;
 }
@@ -169,18 +170,72 @@ export async function resetEmoticon(id: number) {
   return cnsMsg;
 }
 
+export type Article = {
+  id: number;
+  title: string;
+  image_url: string;
+  summary: string;
+};
+
 export async function getArticleList(
   params: {
     limit: number;
     offset: number;
+    [key: string]: any;
   },
   option?: { [key: string]: any },
 ) {
-  return await request<any>(`https://api.spaceflightnewsapi.net/v4/articles/`, {
+  return request<{
+    count: number;
+    results: Article[];
+  }>(`https://api.spaceflightnewsapi.net/v4/articles/`, {
     method: 'GET',
     params: {
       ...params,
     },
     ...(option || {}),
   });
+}
+
+export type ArticleE = {
+  id: number | string;
+  name: string;
+};
+
+export async function getEventList(
+  params: {
+    limit: number;
+    offset: number;
+  },
+  option?: { [key: string]: any },
+) {
+  return request<{ count: number; results: ArticleE[] }>(
+    'https://ll.thespacedevs.com/2.2.0/event/',
+    {
+      method: 'GET',
+      params: {
+        ...params,
+      },
+      ...(option || {}),
+    },
+  );
+}
+
+export async function getLaunchList(
+  params: {
+    limit: number;
+    offset: number;
+  },
+  option?: { [key: string]: any },
+) {
+  return request<{ count: number; results: ArticleE[] }>(
+    'https://ll.thespacedevs.com/2.2.0/launch/',
+    {
+      method: 'GET',
+      params: {
+        ...params,
+      },
+      ...(option || {}),
+    },
+  );
 }

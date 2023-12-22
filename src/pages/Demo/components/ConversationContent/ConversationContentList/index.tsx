@@ -5,7 +5,7 @@ import { ProCard, ProList } from '@ant-design/pro-components';
 import { Msg, listMsg, resetEmoticon, sendEmoticon } from '@/services/ant-design-pro/api';
 
 import styles from './index.less';
-import { CloseOutlined, LikeOutlined, LoadingOutlined } from '@ant-design/icons';
+import { CloseOutlined, LikeOutlined } from '@ant-design/icons';
 import {
   EllipsisIcon,
   HeartIcon,
@@ -32,7 +32,7 @@ const emojis = [
 ];
 
 const ConversationContentList: React.FC<any> = (props: Props) => {
-  const [msgData, setMsgData] = useState<any>([]);
+  const [msgData, setMsgData] = useState<Msg[]>([]);
   const [totalMsg, setTotalMsg] = useState(10);
   const [heartIcon, setHeartIcon] = useState(false);
   const actionRef: any = useRef();
@@ -91,7 +91,7 @@ const ConversationContentList: React.FC<any> = (props: Props) => {
       <InfiniteScroll
         dataLength={msgData.length}
         next={loadMoreData}
-        hasMore={totalMsg < 50}
+        hasMore={msgData.length < totalMsg}
         loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
         endMessage=""
         scrollableTarget="scrollableDiv"

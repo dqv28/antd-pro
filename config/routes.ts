@@ -27,9 +27,25 @@
   },
   {
     path: '/article-list',
-    name: 'Article ',
+    name: 'Article',
     icon: 'smile',
     component: './ArticleList',
+  },
+  {
+    path: '/article-table',
+    name: 'Article table',
+    icon: 'table',
+    component: './ArticleTable',
+  },
+  {
+    path: '/article-detail/:id',
+    component: './ArticleDetail',
+  },
+  {
+    path: '/article-form',
+    name: 'Article form',
+    icon: 'table',
+    component: './ArticleForm',
   },
   {
     path: '/admin',

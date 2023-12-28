@@ -1,11 +1,9 @@
 import {
   Article,
-  ArticleE,
   getArticleList,
   getEventList,
   getLaunchList,
 } from '@/services/ant-design-pro/api';
-import { DownOutlined, UpOutlined } from '@ant-design/icons';
 import {
   ActionType,
   ProFormDateRangePicker,
@@ -15,7 +13,7 @@ import {
   QueryFilter,
 } from '@ant-design/pro-components';
 import { useInfiniteScroll } from 'ahooks';
-import { Button, Skeleton } from 'antd';
+import { Skeleton } from 'antd';
 import { useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -31,7 +29,7 @@ const ArticleList = () => {
   const actionRef = useRef<ActionType>();
   const [formFilter, setFormFilter] = useState<FormFilter>();
 
-  const handleChangeInput = async (formData: FormFilter & { time?: string[] }) => {
+  const handleChangeInput = async (formData: any & { time?: string[] }) => {
     try {
       setFormFilter({
         published_at_gte: formData.time ? formData.time[0] : '',
@@ -52,6 +50,7 @@ const ArticleList = () => {
     list: Article[];
   }>(
     async (currentData) => {
+      console.log(formFilter);
       const res = await getArticleList({
         limit: 10,
         offset: currentData !== undefined ? currentData.list.length : 0,
@@ -71,29 +70,19 @@ const ArticleList = () => {
 
   return (
     <>
-      <QueryFilter
-        layout="horizontal"
-        onFinish={handleChangeInput}
-        submitter={{
-          render: () => [
-            <Button type="primary" htmlType="submit">
-              Search
-            </Button>,
-          ],
-        }}
-        collapseRender={(collapsed) => (
-          <Button>
-            Expand
-            {collapsed ? <DownOutlined /> : <UpOutlined />}
-          </Button>
-        )}
-      >
+      <QueryFilter layout="horizontal" onFinish={handleChangeInput} syncToUrl>
         <ProFormText name="title_contains" placeholder="Search for..." />
         <ProFormSelect
           request={async () => {
             const res = await getEventList({ limit: 10, offset: 0 });
 
-            return res.results.map((event: ArticleE) => ({ value: event.id, label: event.name }));
+            return res.results;
+          }}
+          fieldProps={{
+            fieldNames: {
+              label: 'name',
+              value: 'id',
+            },
           }}
           width="md"
           name="event"
@@ -103,7 +92,13 @@ const ArticleList = () => {
           request={async () => {
             const res = await getLaunchList({ limit: 10, offset: 0 });
 
-            return res.results.map((event: ArticleE) => ({ value: event.id, label: event.name }));
+            return res.results;
+          }}
+          fieldProps={{
+            fieldNames: {
+              label: 'name',
+              value: 'id',
+            },
           }}
           width="md"
           name="launch"

@@ -174,7 +174,9 @@ export type Article = {
   id: number;
   title: string;
   image_url: string;
-  summary: string;
+  news_site: string;
+  published_at: string;
+  [key: string]: any;
 };
 
 export async function getArticleList(
@@ -197,6 +199,22 @@ export async function getArticleList(
   });
 }
 
+export type Params = {
+  [key: string]: any;
+};
+
+export async function getArticleDetail(
+  params: {
+    id: number;
+  },
+  option?: { [key: string]: any },
+) {
+  return request<Article>(`https://api.spaceflightnewsapi.net/v4/articles/${params.id}`, {
+    method: 'GET',
+    ...(option || {}),
+  });
+}
+
 export type ArticleE = {
   id: number | string;
   name: string;
@@ -209,16 +227,13 @@ export async function getEventList(
   },
   option?: { [key: string]: any },
 ) {
-  return request<{ count: number; results: ArticleE[] }>(
-    'https://ll.thespacedevs.com/2.2.0/event/',
-    {
-      method: 'GET',
-      params: {
-        ...params,
-      },
-      ...(option || {}),
+  return request<{ results: ArticleE[] }>('https://ll.thespacedevs.com/2.2.0/event/', {
+    method: 'GET',
+    params: {
+      ...params,
     },
-  );
+    ...(option || {}),
+  });
 }
 
 export async function getLaunchList(
@@ -228,14 +243,159 @@ export async function getLaunchList(
   },
   option?: { [key: string]: any },
 ) {
-  return request<{ count: number; results: ArticleE[] }>(
-    'https://ll.thespacedevs.com/2.2.0/launch/',
-    {
-      method: 'GET',
-      params: {
-        ...params,
-      },
-      ...(option || {}),
+  return request<{ results: ArticleE[] }>('https://ll.thespacedevs.com/2.2.0/launch/', {
+    method: 'GET',
+    params: {
+      ...params,
     },
-  );
+    ...(option || {}),
+  });
+}
+
+export type Menu = {
+  id: number;
+  name: string;
+  path: string;
+  children?: Menu[];
+};
+
+export async function getMenu(): Promise<{ success: boolean; data: Menu[] }> {
+  const data = localStorage.getItem('menus');
+
+  if (!data) {
+    return {
+      success: false,
+      data: [],
+    };
+  }
+
+  return {
+    success: true,
+    data: JSON.parse(data),
+  };
+}
+
+export async function addMenu(menu: Menu): Promise<{ success: boolean; data: Menu }> {
+  const data = localStorage.getItem('menus');
+
+  if (data === null) {
+    localStorage.setItem('menus', JSON.stringify([menu]));
+    return {
+      success: true,
+      data: menu,
+    };
+  }
+
+  const oldMenus = JSON.parse(data);
+  localStorage.setItem('menus', JSON.stringify([...oldMenus, menu]));
+
+  return {
+    success: true,
+    data: menu,
+  };
+}
+
+export async function editMenu(menuForm: Menu & { parentId?: number }) {
+  const data = localStorage.getItem('menus');
+
+  if (!data) {
+    return {
+      success: false,
+      msg: 'No data',
+    };
+  }
+
+  const newMenu = JSON.parse(data);
+
+  newMenu.map((item: Menu) => {
+    const parentId = menuForm.parentId;
+    if (menuForm && menuForm.id === item.id) {
+      item.name = menuForm.name;
+      item.path = menuForm.path;
+    }
+    if (parentId && item.id === parentId) {
+      const oldChild = item.children;
+
+      if (!oldChild) {
+        item.children = [
+          {
+            id: menuForm.id,
+            name: menuForm.name,
+            path: menuForm.path,
+            children: [],
+          },
+        ];
+      } else {
+        item.children = [
+          ...oldChild,
+          {
+            id: menuForm.id,
+            name: menuForm.name,
+            path: menuForm.path,
+            children: [],
+          },
+        ];
+      }
+    }
+  });
+
+  localStorage.setItem('menus', JSON.stringify([...newMenu]));
+
+  return {
+    success: true,
+    data: newMenu,
+  };
+}
+
+export async function deleteMenu(id: number) {
+  const data = localStorage.getItem('menus');
+
+  if (!data) {
+    return {
+      success: false,
+      msg: 'No data',
+    };
+  }
+
+  const currentMenu = JSON.parse(data);
+
+  const newMenu = currentMenu.filter((item: Menu) => item.id !== id);
+
+  localStorage.setItem('menus', JSON.stringify([...newMenu]));
+
+  return {
+    success: true,
+    data: newMenu,
+  };
+}
+
+export async function addChildrenMenu(parentId: number, child: Menu) {
+  const data = localStorage.getItem('menus');
+
+  if (!data) {
+    return {
+      success: false,
+      msg: 'No data',
+    };
+  }
+
+  const menus = JSON.parse(data);
+  menus.map((item: Menu) => {
+    const oldChild = item.children;
+
+    if (item.id === parentId) {
+      if (!oldChild) {
+        item.children = [child];
+      } else {
+        item.children = [...oldChild, child];
+      }
+    }
+  });
+
+  localStorage.setItem('menus', JSON.stringify([...menus]));
+
+  return {
+    success: true,
+    data,
+  };
 }

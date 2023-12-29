@@ -1,76 +1,89 @@
-import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import {
-  ActionType,
-  EditableFormInstance,
-  EditableProTable,
-  ModalForm,
-  ProForm,
-  ProFormText,
-} from '@ant-design/pro-components';
-import { Button } from 'antd';
-import { set, uniqueId } from 'lodash';
-import { useRef, useState } from 'react';
-
-type FormData = {
-  id: number;
-  name: string;
-  path: string;
-};
+import { ProForm, ProFormText } from '@ant-design/pro-components';
+import MenuItemFormItem from './MenuItemTable';
+import React from 'react';
+import { uniqueId } from 'lodash';
 
 export type TableListItem = {
   key: number;
   [key: string]: any;
 };
 
-const ArticleForm = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const tableRef = useRef<ActionType>();
-  const editableRef = useRef<EditableFormInstance>();
-  let count = 1;
-  const [level, setLevel] = useState<number[]>([count]);
-
-  const handleAddMenu = async (formData: FormData) => {
-    const id = uniqueId();
-    tableRef.current?.addEditRecord?.({
-      ...formData,
-      id,
-      children: [],
-    });
-    tableRef.current?.cancelEditable(id);
-
-    return true;
-  };
-
+const ArticleForm: React.FC = () => {
   const handleSubmit = async (form: any) => {
     console.log('Form', form);
   };
 
   var menu = [
     {
-      name: 'item 1',
+      id: 1,
+      name: 'menu',
+      path: 'menu',
       children: [
         {
-          name: 'item 2',
+          id: 2,
+          name: 'child',
+          path: 'child',
+          children: [],
+        },
+      ],
+    },
+    {
+      id: 3,
+      name: 'menu 2',
+      path: 'menu2',
+      children: [],
+    },
+    {
+      id: 4,
+      name: 'menu 3',
+      path: 'menu3',
+      children: [
+        {
+          id: 5,
+          name: 'child 2',
+          path: 'child2',
           children: [
             {
-              name: 'item 3',
+              id: 6,
+              name: 'child 3',
+              path: 'child3',
+              children: [],
             },
           ],
         },
       ],
     },
-    {
-      name: 'item 4',
-    },
-    {
-      name: 'item 5',
-      children: [
-        {
-          name: 'item 6',
-        },
-      ],
-    },
   ];
+
+  const addChildren = (menu: any) => {
+    if (!menu) {
+      return;
+    }
+
+    menu.map((item: any) => {
+      if (item.name === 'child 3') {
+        item.children = [
+          ...item.children,
+          {
+            id: 7,
+            name: 'child 4',
+            path: 'child4',
+            children: [],
+          },
+        ];
+        console.log('1');
+      }
+
+      if (item.children) {
+        addChildren(item.children);
+      }
+    });
+
+    return menu;
+  };
+
+  const newMenu = addChildren(menu);
+  console.log(newMenu);
 
   return (
     <>
@@ -78,6 +91,49 @@ const ArticleForm = () => {
         title="Add menu"
         onFinish={handleSubmit}
         style={{ backgroundColor: '#fff', padding: '16px 24px' }}
+        // initialValues={{
+        //   items: [
+        //     {
+        //       id: 1,
+        //       name: 'menu',
+        //       path: 'menu',
+        //       children: [
+        //         {
+        //           id: 2,
+        //           name: 'child',
+        //           path: 'child',
+        //           children: [],
+        //         },
+        //       ],
+        //     },
+        //     {
+        //       id: 3,
+        //       name: 'menu 2',
+        //       path: 'menu2',
+        //       children: [],
+        //     },
+        //     {
+        //       id: 4,
+        //       name: 'menu 3',
+        //       path: 'menu3',
+        //       children: [
+        //         {
+        //           id: 5,
+        //           name: 'child 2',
+        //           path: 'child2',
+        //           children: [
+        //             {
+        //               id: 6,
+        //               name: 'child 3',
+        //               path: 'child3',
+        //               children: [],
+        //             },
+        //           ],
+        //         },
+        //       ],
+        //     },
+        //   ],
+        // }}
       >
         <ProFormText
           name="name"
@@ -86,118 +142,7 @@ const ArticleForm = () => {
           rules={[{ required: true, message: 'This rule is required' }]}
         />
         <ProFormText name="company" label="Company" placeholder="company" />
-
-        <EditableProTable
-          size="large"
-          rowKey="id"
-          name="menu"
-          cardProps={{
-            bodyStyle: {
-              padding: 0,
-            },
-          }}
-          actionRef={tableRef}
-          editableFormRef={editableRef}
-          recordCreatorProps={false}
-          columns={[
-            {
-              title: 'Name',
-              dataIndex: 'name',
-            },
-            {
-              title: 'Path',
-              dataIndex: 'path',
-            },
-
-            {
-              title: 'Option',
-              valueType: 'option',
-              render: (_, record, index, action) => [
-                <Button
-                  onClick={() => {
-                    const data = editableRef.current?.getRowData?.(
-                      record.parentId ? record.parentId : record.id,
-                    );
-
-                    const newChild = {
-                      id: uniqueId(),
-                      parentId: data.id,
-                      name: `Child `,
-                      path: `child`,
-                      children: [],
-                    };
-                    const addChildren = (menu: any, level: number) => {
-                      if (level > 0) {
-                        menu.children?.push(newChild);
-
-                        if (menu.parentId) {
-                          addChildren(menu.children, (level -= 1));
-                          console.log(menu);
-                        }
-
-                        return menu;
-                      }
-                    };
-
-                    const newData = addChildren(data, 2);
-
-                    setLevel((prevLevel) => [...prevLevel, count]);
-                    editableRef?.current?.setRowData?.(data.id, newData);
-                  }}
-                  type="primary"
-                  icon={<PlusOutlined />}
-                />,
-                <Button
-                  onClick={() => setIsModalOpen(true)}
-                  type="primary"
-                  icon={<EditOutlined />}
-                  ghost
-                />,
-                <Button
-                  onClick={() => {
-                    const data = editableRef.current?.getRowData?.(
-                      record.parentId ? record.parentId : record.id,
-                    );
-                    editableRef.current?.setRowData?.(data.id, {
-                      children: record.parentId
-                        ? data.children.filter((item: any) => item.id !== record.id)
-                        : [],
-                    });
-                  }}
-                  type="primary"
-                  icon={<DeleteOutlined />}
-                  danger
-                />,
-              ],
-            },
-          ]}
-        />
-        <ModalForm
-          title="Add menu"
-          onFinish={handleAddMenu}
-          trigger={<Button type="dashed">Add menu</Button>}
-        >
-          <ProFormText
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-            name="name"
-            label="Name"
-            placeholder="Please input"
-          />
-          <ProFormText
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-            name="path"
-            label="Path"
-            placeholder="Please input"
-          />
-        </ModalForm>
+        <MenuItemFormItem name="items" />
       </ProForm>
     </>
   );

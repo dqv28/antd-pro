@@ -18,57 +18,65 @@ const ArticleForm: React.FC = () => {
         title="Add menu"
         onFinish={handleSubmit}
         style={{ backgroundColor: '#fff', padding: '16px 24px' }}
-        // initialValues={{
-        //   items: [
-        //     {
-        //       id: 1,
-        //       name: 'menu',
-        //       path: 'menu',
-        //       children: [
-        //         {
-        //           id: 2,
-        //           name: 'child',
-        //           path: 'child',
-        //           children: [],
-        //         },
-        //       ],
-        //     },
-        //     {
-        //       id: 3,
-        //       name: 'menu 2',
-        //       path: 'menu2',
-        //       children: [],
-        //     },
-        //     {
-        //       id: 4,
-        //       name: 'menu 3',
-        //       path: 'menu3',
-        //       children: [
-        //         {
-        //           id: 5,
-        //           name: 'child 2',
-        //           path: 'child2',
-        //           children: [
-        //             {
-        //               id: 6,
-        //               name: 'child 3',
-        //               path: 'child3',
-        //               children: [],
-        //             },
-        //           ],
-        //         },
-        //       ],
-        //     },
-        //   ],
-        // }}
+        initialValues={{
+          items: [
+            {
+              id: '10',
+              name: 'menu',
+              path: 'menu',
+              children: [
+                {
+                  id: '12',
+                  name: 'child',
+                  path: 'child',
+                  parentId: '10',
+                  children: [
+                    {
+                      id: '17',
+                      name: 'child 4',
+                      path: 'child4',
+                      parentId: '12',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              id: '13',
+              name: 'menu 2',
+              path: 'menu2',
+            },
+            {
+              id: '14',
+              name: 'menu 3',
+              path: 'menu3',
+              children: [
+                {
+                  id: '15',
+                  name: 'child 2',
+                  path: 'child2',
+                  parentId: '14',
+                  children: [
+                    {
+                      id: '16',
+                      name: 'child 3',
+                      path: 'child3',
+                      parentId: '15',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        }}
       >
         <ProFormText
           name="name"
           label="Name"
-          placeholder="name"
+          placeholder="Please input"
           rules={[{ required: true, message: 'This rule is required' }]}
         />
-        <ProFormText name="company" label="Company" placeholder="company" />
+        <ProFormText name="company" label="Company" placeholder="Please input" />
         <MenuItemFormItem name="items" />
       </ProForm>
     </>

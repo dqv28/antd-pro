@@ -256,5 +256,6 @@ export type Menu = {
   id: string;
   name: string;
   path: string;
-  children?: Menu[];
+  parentId?: string;
+  children?: Menu[] | null;
 };

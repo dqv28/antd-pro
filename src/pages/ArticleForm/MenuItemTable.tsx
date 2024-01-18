@@ -8,12 +8,19 @@ import type {
   DragStartEvent,
   UniqueIdentifier,
 } from '@dnd-kit/core';
-import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
+import {
+  DndContext,
+  DragOverlay,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Button, Form, Popconfirm, Space, Table, message } from 'antd';
 import { uniqueId } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
   'data-row-key': string;
@@ -26,9 +33,13 @@ const MenuItemTable: React.FC<{
   const [expandedRowKeys, setExpandedRowKeys] = useState<readonly React.Key[]>([]);
   const [dataSource, setDataSource] = useState<Menu[]>([]);
   const [overId, setOverId] = useState<UniqueIdentifier>();
-  const [offsetLeft, setOffsetLeft] = useState<number>();
+  const [activeId, setActiveId] = useState<UniqueIdentifier>();
+  const [rowId, setRowId] = useState<string[]>([]);
+  const [offsetLeft, setOffsetLeft] = useState<number>(0);
   const [isGrappng, setIsGrapping] = useState<boolean>(false);
   const [form] = Form.useForm();
+
+  // console.log('render');
 
   const Row = (props: RowProps) => {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -62,22 +73,25 @@ const MenuItemTable: React.FC<{
     return () => setDataSource([]);
   }, [value]);
 
-  let sId: UniqueIdentifier[] = [];
-  const getSortIdArr = (menu: Menu[]) => {
-    if (!menu) {
-      return;
-    }
-
-    for (const item of menu) {
-      sId.push(item?.id);
-
-      if (item.children) {
-        getSortIdArr(item.children);
+  useEffect(() => {
+    const getSortIdArr = (menu: Menu[]) => {
+      if (!menu) {
+        return;
       }
-    }
-  };
 
-  getSortIdArr(dataSource);
+      for (const item of menu) {
+        setRowId((prevRowId: string[]) => [...prevRowId, item?.id]);
+
+        if (item.children) {
+          getSortIdArr(item.children);
+        }
+      }
+    };
+
+    getSortIdArr(dataSource);
+
+    return () => setRowId([]);
+  }, [dataSource]);
 
   const filterMenu = [
     {
@@ -96,6 +110,7 @@ const MenuItemTable: React.FC<{
       {
         ...formData,
         id: uniqueId(),
+        children: [],
       },
     ]);
 
@@ -191,13 +206,14 @@ const MenuItemTable: React.FC<{
   const filterItem = (menu: Menu[], activeId: UniqueIdentifier, overId: UniqueIdentifier) => {
     let newMenu: Menu[] = [];
 
+    if (activeId === overId) {
+      newMenu = menu;
+      return newMenu;
+    }
+
     for (const menuItem of menu) {
       if (menuItem.id === activeId) {
-        // if (activeId === overId) {
-        //   newMenu.push(menuItem);
-        // } else {
         newMenu.push();
-        // }
       } else {
         newMenu.push(
           menuItem.children
@@ -214,34 +230,54 @@ const MenuItemTable: React.FC<{
   };
 
   const handleDragEnd = ({ active, over, delta }: DragEndEvent) => {
-    // offsetLeft >= 100
-    // delta.y >= 0 => Keo xuong
-    // delta.y < 0 => Keo len
-
     setIsGrapping(false);
+
     if (!active || !over) return;
 
     const activeItem = findItem(dataSource, active.id);
     const overItem = findItem(dataSource, over.id);
     const newMenu = filterItem(dataSource, active.id, over.id);
+    const activeIndex = findIndex(dataSource, active.id);
 
     const moveItem = (menu: Menu[], activeItem: Menu, overItem: Menu) => {
       let newMenu: Menu[] = [];
+      let prevActiveItem: Menu;
 
       for (const menuItem of menu) {
-        if (menuItem.id === overItem.id) {
-          const node = [activeItem, menuItem];
-          if (delta.y >= 0) {
-            if (expandedRowKeys.includes(menuItem.id)) {
-              newMenu.push({
-                ...menuItem,
-                children: [activeItem, ...(menuItem.children ?? [])],
-              });
-            } else {
-              newMenu.push(menuItem, activeItem);
-            }
+        if (menuItem.id === activeItem.id && activeItem.id === overItem.id) {
+          prevActiveItem = menu[activeIndex - 1];
+
+          if (delta.x >= 50 && prevActiveItem && expandedRowKeys.includes(prevActiveItem.id)) {
+            newMenu = menu
+              .filter(
+                (item: Menu) =>
+                  prevActiveItem && item.id !== prevActiveItem.id && item.id !== menuItem.id,
+              )
+              .map((item: Menu) =>
+                item.id === prevActiveItem.id && item.children
+                  ? {
+                      ...prevActiveItem,
+                      children: [...(prevActiveItem.children ?? []), activeItem],
+                    }
+                  : prevActiveItem,
+              );
+            console.log(newMenu);
+          }
+        }
+
+        if (menuItem.id === overItem.id && activeItem.id !== overItem.id) {
+          const isExpand = expandedRowKeys.includes(menuItem.id);
+
+          if (delta.y >= 0 && isExpand) {
+            newMenu.push({
+              ...menuItem,
+              children: [activeItem, ...(menuItem.children ?? [])],
+            });
           } else {
-            newMenu.push(activeItem, menuItem);
+            newMenu.push(
+              delta.y >= 0 ? menuItem : activeItem,
+              delta.y >= 0 ? activeItem : menuItem,
+            );
           }
         } else {
           newMenu.push(
@@ -263,16 +299,22 @@ const MenuItemTable: React.FC<{
     }
   };
 
-  const handleDragOver = ({ over }: DragOverEvent) => {
-    setOverId(over?.id);
-  };
+  const handleDragOver = useCallback(() => {
+    ({ over }: DragOverEvent) => {
+      setOverId(over?.id);
+    };
+  }, []);
 
-  const handleDragMove = ({ delta }: DragMoveEvent) => {
-    setOffsetLeft(delta.x);
-  };
+  const handleDragMove = useCallback(() => {
+    ({ delta }: DragMoveEvent) => {
+      console.log(delta.x);
+      setOffsetLeft(delta.x);
+    };
+  }, [setOffsetLeft]);
 
   const handleDragStart = ({ active }: DragStartEvent) => {
     setExpandedRowKeys(expandedRowKeys.filter((item: React.Key) => item !== active.id));
+    setActiveId(active.id);
   };
 
   return (
@@ -284,7 +326,7 @@ const MenuItemTable: React.FC<{
         onDragMove={handleDragMove}
         onDragStart={handleDragStart}
       >
-        <SortableContext items={sId} strategy={verticalListSortingStrategy}>
+        <SortableContext items={rowId} strategy={verticalListSortingStrategy}>
           <Table
             components={{
               body: {
@@ -336,6 +378,7 @@ const MenuItemTable: React.FC<{
                                       name: `child ${uniqueId()}`,
                                       path: 'child',
                                       parentId: item.id,
+                                      children: [],
                                     },
                                   ],
                                 }
@@ -429,7 +472,7 @@ const MenuItemTable: React.FC<{
             dataSource={dataSource}
             pagination={false}
           />
-          {/* <DragOverlay>{activeId ? 'abc' : null}</DragOverlay> */}
+          {/* <DragOverlay>{activeId ? 'Drag' : null}</DragOverlay> */}
         </SortableContext>
       </DndContext>
       <ModalForm

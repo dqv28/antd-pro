@@ -36,6 +36,7 @@ const ArticleForm: React.FC = () => {
                       name: 'child 4',
                       path: 'child4',
                       parentId: '12',
+                      children: [],
                     },
                   ],
                 },
@@ -45,6 +46,7 @@ const ArticleForm: React.FC = () => {
               id: '13',
               name: 'menu 2',
               path: 'menu2',
+              children: [],
             },
             {
               id: '14',
@@ -62,6 +64,7 @@ const ArticleForm: React.FC = () => {
                       name: 'child 3',
                       path: 'child3',
                       parentId: '15',
+                      children: [],
                     },
                   ],
                 },

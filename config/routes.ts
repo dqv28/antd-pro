@@ -48,6 +48,13 @@
     component: './ArticleForm',
   },
   {
+    path: '/builder',
+    name: 'Builder',
+    icon: 'smile',
+    component: './Builder',
+  },
+
+  {
     path: '/admin',
     name: 'admin',
     icon: 'crown',

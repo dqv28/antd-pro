@@ -247,22 +247,22 @@ const MenuItemTable: React.FC<{
         if (menuItem.id === activeItem.id && activeItem.id === overItem.id) {
           prevActiveItem = menu[activeIndex - 1];
 
-          if (delta.x >= 50 && prevActiveItem && expandedRowKeys.includes(prevActiveItem.id)) {
-            newMenu = menu
-              .filter(
-                (item: Menu) =>
-                  prevActiveItem && item.id !== prevActiveItem.id && item.id !== menuItem.id,
-              )
-              .map((item: Menu) =>
-                item.id === prevActiveItem.id && item.children
-                  ? {
-                      ...prevActiveItem,
-                      children: [...(prevActiveItem.children ?? []), activeItem],
-                    }
-                  : prevActiveItem,
-              );
-            console.log(newMenu);
-          }
+          // if (delta.x >= 50 && prevActiveItem && expandedRowKeys.includes(prevActiveItem.id)) {
+          //   newMenu = menu
+          //     .filter(
+          //       (item: Menu) =>
+          //         prevActiveItem && item.id !== prevActiveItem.id && item.id !== menuItem.id,
+          //     )
+          //     .map((item: Menu) =>
+          //       item.id === prevActiveItem.id && item.children
+          //         ? {
+          //             ...prevActiveItem,
+          //             children: [...(prevActiveItem.children ?? []), activeItem],
+          //           }
+          //         : prevActiveItem,
+          //     );
+          //   console.log(newMenu);
+          // }
         }
 
         if (menuItem.id === overItem.id && activeItem.id !== overItem.id) {

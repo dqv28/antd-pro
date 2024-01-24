@@ -259,3 +259,44 @@ export type Menu = {
   parentId?: string;
   children?: Menu[] | null;
 };
+
+//Page builder API
+interface Options {
+  [key: string]: any;
+}
+
+export interface Block {
+  id: string;
+  type: string;
+  options: Options;
+  [key: string]: any;
+}
+
+export interface BuilderComp {
+  page?: string;
+  blocks?: Block[];
+}
+
+export const getBuilderComp = () => {
+  const str = localStorage.getItem('Builder');
+
+  if (!str) {
+    return {};
+  }
+
+  const builder: BuilderComp = JSON.parse(str);
+  return builder;
+};
+
+export const addBuilderComp = (page: string, comp: Block) => {
+  const str = localStorage.getItem('Builder');
+  const data = str ? JSON.parse(str) : null;
+
+  const builder: BuilderComp = {
+    page,
+    blocks: data ? [...data.blocks, comp] : [comp],
+  };
+
+  localStorage.setItem('Builder', JSON.stringify(builder));
+  return comp;
+};

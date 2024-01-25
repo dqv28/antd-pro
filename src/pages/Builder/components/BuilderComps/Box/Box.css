@@ -1,0 +1,7 @@
+.box {
+  border: 1px solid transparent;
+}
+
+.box:hover {
+  border: 1px solid #66a8ff;
+}

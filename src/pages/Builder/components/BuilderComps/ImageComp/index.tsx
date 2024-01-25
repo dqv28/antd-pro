@@ -4,9 +4,9 @@ import './Image.css';
 
 type Props = {
   item: Block;
+  [key: string]: any;
 };
-
-const Image = ({ item }: Props) => {
+const Image = ({ item, ...props }: Props) => {
   const {
     options: { imageUrl, alt },
   } = item;

@@ -1,53 +1,19 @@
-import { BoxIcon, BtnIcon, ColIcon, SectionIcon } from '@/components/Icons';
-import { CaretRightOutlined, FontSizeOutlined, PictureOutlined } from '@ant-design/icons';
+import { CaretRightOutlined } from '@ant-design/icons';
 import { ProList } from '@ant-design/pro-components';
 import { Row } from 'antd';
 import { Key, useState } from 'react';
 import MenuItem from './MenuItem';
 
 import './Menu.css';
+import { CompList } from '@/services/ant-design-pro/api';
 
-const compLists = [
-  {
-    id: 1,
-    icon: <FontSizeOutlined />,
-    text: 'Text',
-    type: 'Text',
-  },
-  {
-    id: 2,
-    icon: <PictureOutlined />,
-    text: 'Image',
-    type: 'Image',
-  },
-  {
-    id: 3,
-    icon: <BtnIcon />,
-    text: 'Button',
-    type: 'Button',
-  },
-  {
-    id: 4,
-    icon: <ColIcon />,
-    text: 'Columns',
-    type: 'Columns',
-  },
-  {
-    id: 5,
-    icon: <BoxIcon />,
-    text: 'Box',
-    type: 'Box',
-  },
-  {
-    id: 6,
-    icon: <SectionIcon />,
-    text: 'Section',
-    type: 'Section',
-  },
-];
+type Props = {
+  compLists: CompList[];
+  [key: string]: any;
+};
 
-const MenuComp = () => {
-  const [expandedRowKeys, setExpandedRowKeys] = useState<readonly Key[]>([]);
+const MenuComp = ({ compLists }: Props) => {
+  const [expandedRowKeys, setExpandedRowKeys] = useState<readonly Key[]>([0]);
 
   const data = [
     {

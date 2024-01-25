@@ -3,9 +3,9 @@ import { Button } from 'antd';
 
 type Props = {
   item: Block;
+  [key: string]: any;
 };
-
-const ButtonComp = ({ item }: Props) => {
+const ButtonComp = ({ item, ...props }: Props) => {
   const {
     options: { text },
   } = item;

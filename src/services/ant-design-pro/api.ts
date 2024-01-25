@@ -1,5 +1,6 @@
 // @ts-ignore
 /* eslint-disable */
+import { ReactNode } from 'react';
 import { request } from 'umi';
 
 /** 获取当前的用户 GET /api/currentUser */
@@ -261,6 +262,13 @@ export type Menu = {
 };
 
 //Page builder API
+export interface CompList {
+  id: number;
+  icon: ReactNode;
+  text: string;
+  type: string;
+}
+
 interface Options {
   [key: string]: any;
 }
@@ -269,12 +277,13 @@ export interface Block {
   id: string;
   type: string;
   options: Options;
-  [key: string]: any;
+  icon: ReactNode;
+  children?: Block[];
 }
 
 export interface BuilderComp {
   page?: string;
-  blocks?: Block[];
+  blocks: Block[];
 }
 
 export const getBuilderComp = () => {

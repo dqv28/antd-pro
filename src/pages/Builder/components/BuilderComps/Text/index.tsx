@@ -5,9 +5,10 @@ import './Text.css';
 
 type Props = {
   item: Block;
+  [key: string]: any;
 };
 
-const Text = ({ item }: Props) => {
+const Text = ({ item, ...props }: Props) => {
   const [change, setChange] = useState(false);
   const {
     options: { text },

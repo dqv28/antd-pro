@@ -26,7 +26,7 @@ const BuilderItem = ({ item, collision, ...props }: Props) => {
   };
 
   return (
-    <div key={props.index} ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
       {item.type === 'Text' && <Text item={item} />}
       {item.type === 'Image' && <Image item={item} />}
       {item.type === 'Button' && <ButtonComp item={item} />}

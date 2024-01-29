@@ -20,7 +20,7 @@ const MenuComp = ({ compLists }: Props) => {
       title: 'Basics',
       description: (
         <Row gutter={[8, 8]} style={{ marginTop: 16 }}>
-          {compLists.map((item) => (
+          {compLists.map((item, index) => (
             <MenuItem item={item} />
           ))}
         </Row>
@@ -30,7 +30,7 @@ const MenuComp = ({ compLists }: Props) => {
       title: 'Layout',
       description: (
         <Row gutter={[8, 8]} style={{ marginTop: 16 }}>
-          {compLists.map((item) => (
+          {compLists.map((item, index) => (
             <MenuItem item={item} />
           ))}
         </Row>
@@ -40,7 +40,7 @@ const MenuComp = ({ compLists }: Props) => {
       title: 'Forms',
       description: (
         <Row gutter={[8, 8]} style={{ marginTop: 16 }}>
-          {compLists.map((item) => (
+          {compLists.map((item, index) => (
             <MenuItem item={item} />
           ))}
         </Row>

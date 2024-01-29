@@ -11,10 +11,11 @@ type MenuItemProps = {
 
 interface Props {
   item: MenuItemProps;
+  [key: string]: any;
 }
 
 const MenuItem = (props: Props) => {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
     id: props.item.id,
     data: props.item,
   });
@@ -29,20 +30,15 @@ const MenuItem = (props: Props) => {
       <Button
         type="text"
         style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
           height: 80,
           backgroundColor: '#f6f7f8',
           padding: 0,
           borderRadius: 6,
-          cursor: isDragging ? 'grabbing' : 'grab',
         }}
         icon={props.item.icon}
         block
       >
-        <span style={{ marginTop: 8 }}>{props.item.text}</span>
+        <div style={{ marginTop: 4 }}>{props.item.text}</div>
       </Button>
     </Col>
   );

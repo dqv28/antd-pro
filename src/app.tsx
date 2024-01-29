@@ -42,8 +42,7 @@ export async function getInitialState(): Promise<{
       const msg = await queryCurrentUser();
       return msg.data;
     } catch (error) {
-      history.push('/');
-      window.location.href = signInWithFbUri;
+      history.push('/builder');
     }
     return undefined;
   };
@@ -53,7 +52,9 @@ export async function getInitialState(): Promise<{
       const currentUser = await fetchUserInfo();
       return {
         fetchUserInfo,
-        currentUser,
+        currentUser: {
+          name: 'Đỗ Vương',
+        },
         settings: defaultSettings,
       };
     }
@@ -65,8 +66,7 @@ export async function getInitialState(): Promise<{
   const currentUser = await getCurrentUser(accessCode);
 
   return {
-    accessCode,
-    currentUser,
+    fetchUserInfo,
     settings: defaultSettings,
   };
 }

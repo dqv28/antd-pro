@@ -6,6 +6,9 @@ import RowComp from '../Row';
 import Box from '../Box';
 
 import './Section.css';
+import NoBuilder from '../NoBuilder';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 type Props = {
   item: Block;
@@ -13,27 +16,43 @@ type Props = {
 };
 
 const Section = ({ item, ...props }: Props) => {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id: item.id,
+    data: item,
+  });
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+  };
+
   return (
-    <div
-      className="section"
-      style={{
-        marginTop: 16,
-        padding: '0 20px 16px',
-        height: item.children && item.children.length > 0 ? 'auto' : 100,
-        // border: collision ? '1px solid #66a8ff' : '',
-      }}
-    >
-      {item.children &&
-        item.children.map((child: any) => (
-          <>
-            {child.type === 'Text' && <Text item={child} />}
-            {child.type === 'Image' && <Image item={child} />}
-            {child.type === 'Button' && <ButtonComp item={child} />}
-            {child.type === 'Row' && <RowComp item={child} />}
-            {child.type === 'Box' && <Box item={child} />}
-            {child.type === 'Section' && <Section item={child} />}
-          </>
-        ))}
+    <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
+      {item.children.map((col) => (
+        <div
+          className="section"
+          style={{
+            marginTop: 16,
+            padding: '0 20px 16px',
+            minHeight: 100,
+          }}
+        >
+          {col.children && col.children.length > 0 ? (
+            col.children.map((child: any) => (
+              <>
+                {child.type === 'Text' && <Text item={child} />}
+                {child.type === 'Image' && <Image item={child} />}
+                {child.type === 'Button' && <ButtonComp item={child} />}
+                {child.type === 'Row' && <RowComp item={child} />}
+                {child.type === 'Box' && <Box item={child} />}
+                {child.type === 'Section' && <Section item={child} />}
+              </>
+            ))
+          ) : (
+            <NoBuilder id={col.id} col={col} isRow={item.type === 'Row'} />
+          )}
+        </div>
+      ))}
     </div>
   );
 };

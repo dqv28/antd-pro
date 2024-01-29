@@ -1,6 +1,8 @@
 import { Block } from '@/services/ant-design-pro/api';
 
 import './Image.css';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 type Props = {
   item: Block;
@@ -11,9 +13,22 @@ const Image = ({ item, ...props }: Props) => {
     options: { imageUrl, alt },
   } = item;
 
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id: item.id,
+    data: item,
+  });
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+  };
+
   return (
     <div
       className={!imageUrl || !alt ? 'img' : ''}
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
       style={{
         backgroundImage: `url(${
           !imageUrl
@@ -21,8 +36,9 @@ const Image = ({ item, ...props }: Props) => {
             : imageUrl
         })`,
         marginTop: 16,
+        ...style,
       }}
-    ></div>
+    />
   );
 };
 

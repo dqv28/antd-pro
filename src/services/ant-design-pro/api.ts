@@ -1,5 +1,6 @@
 // @ts-ignore
 /* eslint-disable */
+import { UniqueIdentifier } from '@dnd-kit/core';
 import { ReactNode } from 'react';
 import { request } from 'umi';
 
@@ -274,11 +275,11 @@ interface Options {
 }
 
 export interface Block {
-  id: string;
+  id: UniqueIdentifier;
   type: string;
   options: Options;
-  icon: ReactNode;
-  children?: Block[];
+  icon?: ReactNode;
+  children: Block[];
 }
 
 export interface BuilderComp {

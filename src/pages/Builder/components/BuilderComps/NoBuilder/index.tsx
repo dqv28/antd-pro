@@ -1,17 +1,23 @@
+import { Block } from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
-import { useDroppable } from '@dnd-kit/core';
+import { UniqueIdentifier, useDroppable } from '@dnd-kit/core';
 
-type Props = {};
+type Props = {
+  id: UniqueIdentifier;
+  col?: Block;
+  isRow: boolean;
+};
 
-const NoBuilder = (props: Props) => {
+const NoBuilder = ({ id, col, isRow }: Props) => {
   const { setNodeRef } = useDroppable({
-    id: 'no-builder',
+    id,
+    data: col,
   });
   return (
     <div
       style={{
-        backgroundColor: 'rgba(26, 115, 232, 0.1)',
-        border: '1px dashed rgba(26, 115, 232, 1)',
+        backgroundColor: isRow ? 'rgba(26, 115, 232, 0.1)' : '',
+        border: isRow ? '1px dashed rgba(26, 115, 232, 1)' : '',
         height: 150,
         display: 'flex',
         alignItems: 'center',
@@ -19,10 +25,12 @@ const NoBuilder = (props: Props) => {
       }}
       ref={setNodeRef}
     >
-      <button style={{ border: 0, background: 'none' }} type="button">
-        <PlusOutlined />
-        <div style={{ marginTop: 8 }}>Dnd to Add block</div>
-      </button>
+      {isRow && (
+        <button style={{ border: 0, background: 'none' }} type="button">
+          <PlusOutlined />
+          <div style={{ marginTop: 8 }}>Dnd to Add block</div>
+        </button>
+      )}
     </div>
   );
 };

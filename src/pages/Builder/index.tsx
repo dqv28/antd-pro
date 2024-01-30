@@ -11,6 +11,7 @@ import {
   MouseSensor,
   TouchSensor,
   UniqueIdentifier,
+  useDraggable,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
@@ -134,10 +135,18 @@ const addBuilder = (
 
 const Builder = (props: Props) => {
   const [activeItem, setActiveItem] = useState<any>();
+  const [activeNum, setActiveNum] = useState<number>(2);
   const [rowChild, setRowChild] = useState<Block[]>([]);
   const [builder, setBuilder] = useState<BuilderComp>({
     blocks: [],
   });
+
+  const { transform } = useDraggable({
+    id: 'draggable',
+  });
+
+  const changeActiveNum = (num: number) => setActiveNum(num);
+  const { blocks } = builder;
 
   useEffect(() => {
     setRowChild(() => {
@@ -155,8 +164,6 @@ const Builder = (props: Props) => {
       return child;
     });
   }, [builder]);
-
-  const { blocks } = builder;
 
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: {
@@ -177,13 +184,17 @@ const Builder = (props: Props) => {
     const {
       data: { current: activeData },
     } = active;
+    const activeChild =
+      activeData && activeData.children && activeData.children.map((item: Block) => item.id);
 
     const newComp = activeData && {
       id: uniqueId(),
       icon: activeData.icon,
       ...optionsComp[activeData.type],
       children:
-        activeData && activeData.type === 'Row'
+        typeof activeData.id === 'string'
+          ? [...activeData.children]
+          : activeData.type === 'Row'
           ? [...rowChild]
           : [
               {
@@ -197,9 +208,8 @@ const Builder = (props: Props) => {
 
     if (over) {
       if (
-        typeof over.id === 'number' ||
-        (typeof active.id === typeof over.id &&
-          (active.id === over.id || (activeData && activeData.type === 'Row')))
+        (typeof active.id === typeof over.id && active.id === over.id) ||
+        (activeChild && activeChild.includes(over.id))
       ) {
         return;
       }
@@ -209,16 +219,24 @@ const Builder = (props: Props) => {
       }));
     }
   };
-  const handleDragStart = ({ active }: DragStartEvent) => {
+  const handleDragStart = (e: DragStartEvent) => {
+    console.log(e);
     const {
       data: { current: activeData },
-    } = active;
+    } = e.active;
 
     setActiveItem(activeData);
   };
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
     // console.log(over);
+  };
+
+  const [elementPosition, setElementPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: any) => {
+    console.log(e.clientX, e.clientY);
+    setElementPosition({ x: e.clientX - 400, y: e.clientY - 170 });
   };
 
   return (
@@ -256,15 +274,29 @@ const Builder = (props: Props) => {
           }
           bodyStyle={{
             padding: 0,
+            height: '82vh',
+            maxHeight: '100%',
           }}
           headerBordered
         >
-          <ProCard colSpan={5} bordered>
+          <ProCard
+            colSpan={5}
+            style={{
+              height: '100%',
+            }}
+            bordered
+          >
             <BuilderComps />
           </ProCard>
 
           <ProCard
             colSpan={14}
+            onMouseMove={handleMouseMove}
+            style={{
+              position: 'relative',
+              maxHeight: '100%',
+              overflow: 'auto',
+            }}
             bodyStyle={{
               padding: 0,
             }}
@@ -277,19 +309,40 @@ const Builder = (props: Props) => {
           </ProCard>
           <ProCard
             colSpan={5}
+            style={{
+              height: '100%',
+            }}
             bodyStyle={{
               padding: '0 16px',
             }}
             bordered
           >
-            <BuilderOptions />
+            <BuilderOptions activeNum={activeNum} changeActiveNum={changeActiveNum} />
           </ProCard>
         </ProCard>
       </SortableContext>
       <DragOverlay>
         {activeItem && activeItem.id ? (
-          <Button icon={activeItem.icon} style={{ zIndex: 9999 }} />
-        ) : null}
+          <Button
+            icon={activeItem.icon}
+            style={{
+              zIndex: 9999,
+              position: 'absolute',
+              top: elementPosition.y,
+              left: elementPosition.x,
+            }}
+          />
+        ) : // <div
+        //   style={{
+        //     position: 'absolute',
+        //     top: elementPosition.y,
+        //     left: elementPosition.x,
+        //     width: '50px',
+        //     height: '50px',
+        //     backgroundColor: 'red',
+        //   }}
+        // ></div>
+        null}
       </DragOverlay>
     </DndContext>
   );

@@ -10,6 +10,8 @@ import Section from '../Section';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
+import '../style.css';
+
 type Props = {
   item: Block;
   [key: string]: any;
@@ -41,7 +43,7 @@ const RowComp = ({ item, ...props }: Props) => {
   //   if (colCount === 1) {
   //     setCols((prevCols) => [prevCols.shift()]);
   //   } else {
-  //     for (let i = 0; i < colCount - 2; i++) {
+  //     for (let i = 0; i < colCount; i++) {
   //       setCols((prevCols) => [
   //         ...prevCols,
   //         {
@@ -62,7 +64,11 @@ const RowComp = ({ item, ...props }: Props) => {
       {...attributes}
       {...listeners}
       gutter={16}
-      style={{ marginTop: 16, ...style }}
+      className="row"
+      style={{
+        margin: ' 16px 0 0',
+        ...style,
+      }}
     >
       {cols.map((col: Block, index) => (
         <Col span={24 / colCount} key={index}>

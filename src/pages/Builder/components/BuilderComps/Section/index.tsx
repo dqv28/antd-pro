@@ -5,7 +5,7 @@ import ButtonComp from '../Button';
 import RowComp from '../Row';
 import Box from '../Box';
 
-import './Section.css';
+import '../style.css';
 import NoBuilder from '../NoBuilder';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';

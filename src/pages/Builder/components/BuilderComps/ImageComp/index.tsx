@@ -1,6 +1,6 @@
 import { Block } from '@/services/ant-design-pro/api';
 
-import './Image.css';
+import '../style.css';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 

@@ -1,0 +1,60 @@
+.box {
+  border: 1px solid #66a8ff;
+}
+
+.box:hover {
+  border: 1px solid #66a8ff;
+}
+
+.img {
+  height: auto;
+  padding-top: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border: 1px solid transparent;
+}
+
+/* .img:hover {
+    border: 1px solid #66a8ff;
+  } */
+
+.row {
+  padding: 16px 0;
+  border: 1px solid transparent;
+}
+
+.row:hover {
+  border: 1px solid #66a8ff;
+}
+
+.section {
+  border: 1px solid #66a8ff;
+}
+
+.section:hover {
+  border: 1px solid #66a8ff;
+}
+
+/* TEXT CSS */
+.text-input {
+  width: 100%;
+  margin-top: 16px;
+  padding: 8px 0;
+  border: 1px solid transparent;
+}
+
+.text-input:focus {
+  border: 1px solid #66a8ff;
+  outline: none;
+}
+
+.div-input {
+  margin-top: 16px;
+  border: 1px solid transparent;
+  cursor: default;
+}
+
+.div-input:hover {
+  border: 1px solid #66a8ff;
+}

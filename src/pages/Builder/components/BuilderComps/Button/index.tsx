@@ -5,9 +5,10 @@ import { Button } from 'antd';
 
 type Props = {
   item: Block;
+  isBelow?: boolean | null;
   [key: string]: any;
 };
-const ButtonComp = ({ item, ...props }: Props) => {
+const ButtonComp = ({ item, isBelow, ...props }: Props) => {
   const {
     options: { text },
   } = item;
@@ -19,6 +20,8 @@ const ButtonComp = ({ item, ...props }: Props) => {
 
   const style = {
     transform: CSS.Translate.toString(transform),
+    borderTop: isBelow === false ? '4px solid #66a8ff' : '4px solid transparent',
+    borderBottom: isBelow === true ? '4px solid #66a8ff' : '4px solid transparent',
     transition,
   };
 

@@ -1,23 +1,22 @@
 import { Block } from '@/services/ant-design-pro/api';
 import { Col, Row } from 'antd';
 import NoBuilder from '../NoBuilder';
-import Image from '../ImageComp';
-import Text from '../Text';
 import { useEffect, useState } from 'react';
-import ButtonComp from '../Button';
-import Box from '../Box';
-import Section from '../Section';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
 import '../style.css';
+import { renderColChild } from '../Object';
+import { UniqueIdentifier } from '@dnd-kit/core';
 
 type Props = {
   item: Block;
+  isBelow?: boolean | null;
+  overId?: UniqueIdentifier;
   [key: string]: any;
 };
 
-const RowComp = ({ item, ...props }: Props) => {
+const RowComp = ({ item, isBelow, overId, ...props }: Props) => {
   const {
     options: { cols: colCount },
     children,
@@ -32,6 +31,8 @@ const RowComp = ({ item, ...props }: Props) => {
 
   const style = {
     transform: CSS.Translate.toString(transform),
+    borderTop: isBelow === false ? '4px solid #66a8ff' : '4px solid transparent',
+    borderBottom: isBelow === true ? '4px solid #66a8ff' : '4px solid transparent',
     transition,
   };
 
@@ -57,7 +58,6 @@ const RowComp = ({ item, ...props }: Props) => {
   //   }
   //   return () => setCols([]);
   // }, [colCount]);
-
   return (
     <Row
       ref={setNodeRef}
@@ -71,17 +71,16 @@ const RowComp = ({ item, ...props }: Props) => {
       }}
     >
       {cols.map((col: Block, index) => (
-        <Col span={24 / colCount} key={index}>
+        <Col
+          span={24 / colCount}
+          key={index}
+          style={{
+            filter: isBelow === null && overId && col.id === overId ? 'brightness(70%)' : 'none',
+          }}
+        >
           {col.children && col.children.length > 0 ? (
-            col.children.map((child: any, index: number) => (
-              <div key={index}>
-                {child.type === 'Text' && <Text item={child} />}
-                {child.type === 'Image' && <Image item={child} />}
-                {child.type === 'Button' && <ButtonComp item={child} />}
-                {child.type === 'Row' && <RowComp item={child} />}
-                {child.type === 'Box' && <Box item={child} />}
-                {child.type === 'Section' && <Section item={child} />}
-              </div>
+            col.children.map((child: Block, index: number) => (
+              <div key={index}>{renderColChild(child)}</div>
             ))
           ) : (
             <NoBuilder id={col.id} col={col} isRow={item.type === 'Row'} />

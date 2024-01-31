@@ -16,7 +16,7 @@ const NoBuilder = ({ id, col, isRow }: Props) => {
   return (
     <div
       style={{
-        backgroundColor: isRow ? 'rgba(26, 115, 232, 0.1)' : '',
+        backgroundColor: isRow ? 'rgba(26, 115, 232, 0.1)' : 'transparent',
         border: isRow ? '1px dashed rgba(26, 115, 232, 1)' : '',
         height: 150,
         display: 'flex',

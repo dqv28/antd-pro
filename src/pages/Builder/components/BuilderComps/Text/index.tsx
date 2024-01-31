@@ -7,10 +7,11 @@ import { CSS } from '@dnd-kit/utilities';
 
 type Props = {
   item: Block;
+  isBelow?: boolean | null;
   [key: string]: any;
 };
 
-const Text = ({ item, ...props }: Props) => {
+const Text = ({ item, isBelow, ...props }: Props) => {
   const [change, setChange] = useState(false);
   const {
     options: { text },
@@ -32,8 +33,15 @@ const Text = ({ item, ...props }: Props) => {
       {change ? (
         <input type="text" defaultValue={text} className="text-input" />
       ) : (
-        <div onDoubleClick={() => setChange(true)} className="div-input">
-          {text}
+        <div
+          style={{
+            borderTop: isBelow === false ? '4px solid #66a8ff' : '4px solid transparent',
+            borderBottom: isBelow === true ? '4px solid #66a8ff' : '4px solid transparent',
+          }}
+        >
+          <div onDoubleClick={() => setChange(true)} className="div-input">
+            {text}
+          </div>
         </div>
       )}
     </div>

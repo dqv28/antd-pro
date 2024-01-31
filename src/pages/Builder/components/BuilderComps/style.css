@@ -1,9 +1,13 @@
+:root {
+  --border-color: #66a8ff;
+}
+
 .box {
-  border: 1px solid #66a8ff;
+  border: 1px solid transparent;
 }
 
 .box:hover {
-  border: 1px solid #66a8ff;
+  border: 1px solid var(--border-color);
 }
 
 .img {
@@ -16,7 +20,7 @@
 }
 
 /* .img:hover {
-    border: 1px solid #66a8ff;
+    border: 1px solid var(--border-color);
   } */
 
 .row {
@@ -25,15 +29,15 @@
 }
 
 .row:hover {
-  border: 1px solid #66a8ff;
+  border: 1px solid var(--border-color);
 }
 
 .section {
-  border: 1px solid #66a8ff;
+  border: 1px solid transparent;
 }
 
 .section:hover {
-  border: 1px solid #66a8ff;
+  border: 1px solid var(--border-color);
 }
 
 /* TEXT CSS */
@@ -45,7 +49,7 @@
 }
 
 .text-input:focus {
-  border: 1px solid #66a8ff;
+  border: 1px solid var(--border-color);
   outline: none;
 }
 
@@ -56,5 +60,5 @@
 }
 
 .div-input:hover {
-  border: 1px solid #66a8ff;
+  border: 1px solid var(--border-color);
 }

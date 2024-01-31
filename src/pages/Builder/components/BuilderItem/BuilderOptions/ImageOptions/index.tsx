@@ -1,4 +1,4 @@
-import { Form, Input, Upload } from 'antd';
+import { Button, Form, Image, Input, Space, Upload, UploadProps, message } from 'antd';
 
 type Props = {};
 
@@ -6,16 +6,28 @@ const ImageOptions = (props: Props) => {
   return (
     <Form name="basic" layout="vertical" autoComplete="off">
       <Form.Item label="Image *">
-        <Upload
-          action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-          listType="picture-card"
-        >
-          <img
+        <Space size={12}>
+          <Image
+            width={80}
+            style={{
+              borderRadius: 6,
+            }}
             src="https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F72c80f114dc149019051b6852a9e3b7a"
-            alt="avatar"
-            style={{ width: '100%' }}
+            placeholder={
+              <Image
+                preview={false}
+                src="https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F72c80f114dc149019051b6852a9e3b7a"
+                width={200}
+              />
+            }
           />
-        </Upload>
+          <label htmlFor="upload">
+            <Button type="text" size="large" style={{ color: '#66a8ff', fontWeight: 500 }}>
+              Choose Photo
+            </Button>
+          </label>
+          <input type="file" id="upload" hidden />
+        </Space>
       </Form.Item>
       <Form.Item label="Alt text">
         <Input />

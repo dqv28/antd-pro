@@ -5,17 +5,16 @@ import { BuilderComps } from './components/BuilderComps';
 import {
   DndContext,
   DragEndEvent,
-  DragOverEvent,
+  DragMoveEvent,
   DragOverlay,
   DragStartEvent,
   MouseSensor,
   TouchSensor,
   UniqueIdentifier,
-  useDraggable,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Block, BuilderComp } from '@/services/ant-design-pro/api';
 import NoBuilder from './components/BuilderComps/NoBuilder';
 import { uniqueId } from 'lodash';
@@ -44,8 +43,7 @@ const optionsComp = {
   Image: {
     type: 'Image',
     options: {
-      imageUrl:
-        'https://cdn.builder.io/api/v1/image/assets%2Fada33349cbd04d0ea5c214a2ca4334ad%2F0669cec62f0a4f239761bcde611992d3',
+      imageUrl: '',
       alt: '',
       style: {},
     },
@@ -99,7 +97,7 @@ const addBuilder = (
 
   const isBelowOverItem =
     activeItem.rect.current.translated &&
-    activeItem.rect.current.translated.top > overItem.rect.top + overItem.rect.height - 16;
+    activeItem.rect.current.translated.top > overItem.rect.height - overItem.rect.height / 2;
 
   const modifier = isBelowOverItem ? 1 : 0;
   newIndex = overIndex >= 0 ? overIndex + modifier : idArr.length + 1;
@@ -135,14 +133,12 @@ const addBuilder = (
 
 const Builder = (props: Props) => {
   const [activeItem, setActiveItem] = useState<any>();
+  const [overId, setOverId] = useState<UniqueIdentifier>();
   const [activeNum, setActiveNum] = useState<number>(2);
+  const [isBelow, setIsBelow] = useState<boolean | null>(null);
   const [rowChild, setRowChild] = useState<Block[]>([]);
   const [builder, setBuilder] = useState<BuilderComp>({
     blocks: [],
-  });
-
-  const { transform } = useDraggable({
-    id: 'draggable',
   });
 
   const changeActiveNum = (num: number) => setActiveNum(num);
@@ -208,19 +204,20 @@ const Builder = (props: Props) => {
 
     if (over) {
       if (
+        typeof over.id === 'number' ||
         (typeof active.id === typeof over.id && active.id === over.id) ||
         (activeChild && activeChild.includes(over.id))
       ) {
         return;
       }
-
+      setIsBelow(null);
+      setOverId(undefined);
       setBuilder((prevBuilder) => ({
         blocks: addBuilder(prevBuilder.blocks, newComp, active, activeData, over),
       }));
     }
   };
   const handleDragStart = (e: DragStartEvent) => {
-    console.log(e);
     const {
       data: { current: activeData },
     } = e.active;
@@ -228,22 +225,32 @@ const Builder = (props: Props) => {
     setActiveItem(activeData);
   };
 
-  const handleDragOver = ({ active, over }: DragOverEvent) => {
-    // console.log(over);
-  };
+  const handleDragMove = useCallback(
+    ({ active, over }: DragMoveEvent) => {
+      if (!over) {
+        return;
+      }
 
-  const [elementPosition, setElementPosition] = useState({ x: 0, y: 0 });
+      setOverId(over.id);
 
-  const handleMouseMove = (e: any) => {
-    console.log(e.clientX, e.clientY);
-    setElementPosition({ x: e.clientX - 400, y: e.clientY - 170 });
-  };
+      const isBelowOverItem =
+        typeof over.id === 'string'
+          ? active.rect.current.translated &&
+            active.rect.current.translated.top >
+              over.rect.top + over.rect.height - over.rect.height / 2
+          : null;
+
+      setIsBelow(isBelowOverItem);
+    },
+    [isBelow],
+  );
 
   return (
     <DndContext
       sensors={sensors}
       onDragStart={handleDragStart}
-      onDragOver={handleDragOver}
+      // onDragOver={handleDragOver}
+      onDragMove={handleDragMove}
       onDragEnd={handleDragEnd}
     >
       <SortableContext items={[]} strategy={horizontalListSortingStrategy}>
@@ -277,6 +284,9 @@ const Builder = (props: Props) => {
             height: '82vh',
             maxHeight: '100%',
           }}
+          headStyle={{
+            height: 75,
+          }}
           headerBordered
         >
           <ProCard
@@ -291,9 +301,7 @@ const Builder = (props: Props) => {
 
           <ProCard
             colSpan={14}
-            onMouseMove={handleMouseMove}
             style={{
-              position: 'relative',
               maxHeight: '100%',
               overflow: 'auto',
             }}
@@ -302,7 +310,13 @@ const Builder = (props: Props) => {
             }}
           >
             {builder && blocks && blocks.length > 0 ? (
-              blocks?.map((item) => <BuilderItem item={item} />)
+              blocks?.map((item) => (
+                <BuilderItem
+                  item={item}
+                  overId={overId}
+                  isBelow={item.id === overId ? isBelow : null}
+                />
+              ))
             ) : (
               <NoBuilder id={'no-builder'} isRow={true} />
             )}
@@ -327,22 +341,9 @@ const Builder = (props: Props) => {
             icon={activeItem.icon}
             style={{
               zIndex: 9999,
-              position: 'absolute',
-              top: elementPosition.y,
-              left: elementPosition.x,
             }}
           />
-        ) : // <div
-        //   style={{
-        //     position: 'absolute',
-        //     top: elementPosition.y,
-        //     left: elementPosition.x,
-        //     width: '50px',
-        //     height: '50px',
-        //     backgroundColor: 'red',
-        //   }}
-        // ></div>
-        null}
+        ) : null}
       </DragOverlay>
     </DndContext>
   );

@@ -1,19 +1,17 @@
 import { Block } from '@/services/ant-design-pro/api';
-import Text from '../BuilderComps/Text';
-import Image from '../BuilderComps/ImageComp';
-import ButtonComp from '../BuilderComps/Button';
-import RowComp from '../BuilderComps/Row';
-import Box from '../BuilderComps/Box';
-import Section from '../BuilderComps/Section';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { childObj } from '../BuilderComps/Object';
+import { UniqueIdentifier } from '@dnd-kit/core';
 
 type Props = {
   item: Block;
+  isBelow?: boolean | null;
+  overId?: UniqueIdentifier;
   [key: string]: any;
 };
 
-const BuilderItem = ({ item, collision, ...props }: Props) => {
+const BuilderItem = ({ item, isBelow, overId, ...props }: Props) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: item.id,
     data: item,
@@ -25,14 +23,11 @@ const BuilderItem = ({ item, collision, ...props }: Props) => {
     transition,
   };
 
+  const ChildComponent = childObj[item.type];
+
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      {item.type === 'Text' && <Text item={item} />}
-      {item.type === 'Image' && <Image item={item} />}
-      {item.type === 'Button' && <ButtonComp item={item} />}
-      {item.type === 'Row' && <RowComp item={item} />}
-      {item.type === 'Box' && <Box item={item} />}
-      {item.type === 'Section' && <Section item={item} collision={collision} />}
+      <ChildComponent isBelow={isBelow} item={item} overId={overId} />
     </div>
   );
 };

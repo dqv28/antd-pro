@@ -16,59 +16,47 @@ type Props = {
   [key: string]: any;
 };
 
-const RowComp = ({ item, isBelow, overId, ...props }: Props) => {
+const RowComp = ({ item, isBelow, overId }: Props) => {
   const {
     options: { cols: colCount },
     children,
   } = item;
 
+  const [isHover, setIsHover] = useState<boolean>();
   const [cols, setCols] = useState<Block[]>([]);
 
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+  const { attributes, listeners, setNodeRef, transform, transition, isOver } = useSortable({
     id: item.id,
     data: item,
   });
 
   const style = {
     transform: CSS.Translate.toString(transform),
-    borderTop: isBelow === false ? '4px solid #66a8ff' : '4px solid transparent',
-    borderBottom: isBelow === true ? '4px solid #66a8ff' : '4px solid transparent',
+    border: isHover || isOver ? '1px solid #66a8ff' : '1px solid transparent',
+    margin: '16px 0 0',
+    padding: '16px 0',
     transition,
   };
+
+  const childIds = item.children.map((col) => col.id);
+
+  useEffect(() => {
+    setIsHover(childIds.includes(overId ?? '') || item.id === overId);
+  }, [overId]);
 
   useEffect(() => {
     setCols([...children]);
   }, [item]);
 
-  // useEffect(() => {
-  //   if (colCount === 1) {
-  //     setCols((prevCols) => [prevCols.shift()]);
-  //   } else {
-  //     for (let i = 0; i < colCount; i++) {
-  //       setCols((prevCols) => [
-  //         ...prevCols,
-  //         {
-  //           id: uniqueId(),
-  //           type: 'Column',
-  //           options: {},
-  //           children: [],
-  //         },
-  //       ]);
-  //     }
-  //   }
-  //   return () => setCols([]);
-  // }, [colCount]);
   return (
     <Row
       ref={setNodeRef}
       {...attributes}
       {...listeners}
       gutter={16}
-      className="row"
-      style={{
-        margin: ' 16px 0 0',
-        ...style,
-      }}
+      style={{ position: 'relative', ...style }}
+      onMouseOver={() => setIsHover(true)}
+      onMouseOut={() => setIsHover(false)}
     >
       {cols.map((col: Block, index) => (
         <Col
@@ -80,13 +68,25 @@ const RowComp = ({ item, isBelow, overId, ...props }: Props) => {
         >
           {col.children && col.children.length > 0 ? (
             col.children.map((child: Block, index: number) => (
-              <div key={index}>{renderColChild(child)}</div>
+              <div key={index}>{renderColChild(child, isBelow, overId)}</div>
             ))
           ) : (
             <NoBuilder id={col.id} col={col} isRow={item.type === 'Row'} />
           )}
         </Col>
       ))}
+      {(isHover || isOver) && (
+        <div
+          style={{
+            position: 'absolute',
+            top: isBelow !== null && isBelow === true ? 'calc(100% - 4px)' : 0,
+            left: 0,
+            right: 0,
+            height: 4,
+            backgroundColor: isBelow !== null ? '#66a8ff' : 'transparent',
+          }}
+        />
+      )}
     </Row>
   );
 };

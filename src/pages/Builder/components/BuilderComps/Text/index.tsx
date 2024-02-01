@@ -12,12 +12,13 @@ type Props = {
 };
 
 const Text = ({ item, isBelow, ...props }: Props) => {
+  const [isHover, setIsHover] = useState(false);
   const [change, setChange] = useState(false);
   const {
     options: { text },
   } = item;
 
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+  const { attributes, listeners, setNodeRef, transform, transition, isOver } = useSortable({
     id: item.id,
     data: item,
   });
@@ -34,14 +35,28 @@ const Text = ({ item, isBelow, ...props }: Props) => {
         <input type="text" defaultValue={text} className="text-input" />
       ) : (
         <div
+          onDoubleClick={() => setChange(true)}
+          className="div-input"
           style={{
-            borderTop: isBelow === false ? '4px solid #66a8ff' : '4px solid transparent',
-            borderBottom: isBelow === true ? '4px solid #66a8ff' : '4px solid transparent',
+            position: 'relative',
+            border: isHover || isOver ? '1px solid #66a8ff' : '1px solid transparent',
           }}
+          onMouseOver={() => setIsHover(true)}
+          onMouseOut={() => setIsHover(false)}
         >
-          <div onDoubleClick={() => setChange(true)} className="div-input">
-            {text}
-          </div>
+          {text}
+          {(isHover || isOver) && (
+            <div
+              style={{
+                position: 'absolute',
+                top: isBelow !== null ? (isBelow === true ? 'calc(100% - 4px)' : 0) : 0,
+                left: 0,
+                right: 0,
+                height: 4,
+                backgroundColor: isBelow !== null ? '#66a8ff' : 'transparent',
+              }}
+            />
+          )}
         </div>
       )}
     </div>

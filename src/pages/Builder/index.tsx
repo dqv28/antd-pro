@@ -97,7 +97,7 @@ const addBuilder = (
 
   const isBelowOverItem =
     activeItem.rect.current.translated &&
-    activeItem.rect.current.translated.top > overItem.rect.height - overItem.rect.height / 2;
+    activeItem.rect.current.translated.top > overItem.rect.top + overItem.rect.height / 2;
 
   const modifier = isBelowOverItem ? 1 : 0;
   newIndex = overIndex >= 0 ? overIndex + modifier : idArr.length + 1;
@@ -130,6 +130,8 @@ const addBuilder = (
         },
   );
 };
+
+const hasChild = ['Row', 'Section', 'Box'];
 
 const Builder = (props: Props) => {
   const [activeItem, setActiveItem] = useState<any>();
@@ -176,7 +178,7 @@ const Builder = (props: Props) => {
 
   const sensors = useSensors(touchSensor, mouseSensor);
 
-  const handleDragEnd = ({ active, over, ...event }: DragEndEvent) => {
+  const handleDragEnd = ({ active, over }: DragEndEvent) => {
     const {
       data: { current: activeData },
     } = active;
@@ -189,17 +191,19 @@ const Builder = (props: Props) => {
       ...optionsComp[activeData.type],
       children:
         typeof activeData.id === 'string'
-          ? [...activeData.children]
-          : activeData.type === 'Row'
-          ? [...rowChild]
-          : [
-              {
-                id: uniqueId(),
-                type: 'Column',
-                options: {},
-                children: [],
-              },
-            ],
+          ? [...activeData.children] ?? []
+          : hasChild.includes(activeData.type)
+          ? activeData.type === 'Row'
+            ? [...rowChild]
+            : [
+                {
+                  id: uniqueId(),
+                  type: 'Column',
+                  options: {},
+                  children: [],
+                },
+              ]
+          : [],
     };
 
     if (over) {
@@ -211,7 +215,7 @@ const Builder = (props: Props) => {
         return;
       }
       setIsBelow(null);
-      setOverId(undefined);
+      setOverId('');
       setBuilder((prevBuilder) => ({
         blocks: addBuilder(prevBuilder.blocks, newComp, active, activeData, over),
       }));
@@ -232,12 +236,12 @@ const Builder = (props: Props) => {
       }
 
       setOverId(over.id);
+      console.log(over.id);
 
       const isBelowOverItem =
         typeof over.id === 'string'
           ? active.rect.current.translated &&
-            active.rect.current.translated.top >
-              over.rect.top + over.rect.height - over.rect.height / 2
+            active.rect.current.translated.top > over.rect.top + over.rect.height / 2
           : null;
 
       setIsBelow(isBelowOverItem);

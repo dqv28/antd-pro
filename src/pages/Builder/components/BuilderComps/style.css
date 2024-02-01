@@ -2,14 +2,6 @@
   --border-color: #66a8ff;
 }
 
-.box {
-  border: 1px solid transparent;
-}
-
-.box:hover {
-  border: 1px solid var(--border-color);
-}
-
 .img {
   height: auto;
   padding-top: 100%;
@@ -23,20 +15,20 @@
     border: 1px solid var(--border-color);
   } */
 
+/* .box {
+  border: 1px solid transparent;
+}
+
+.box:hover {
+  border: 1px solid #66a8ff;
+} */
+
 .row {
   padding: 16px 0;
   border: 1px solid transparent;
 }
 
 .row:hover {
-  border: 1px solid var(--border-color);
-}
-
-.section {
-  border: 1px solid transparent;
-}
-
-.section:hover {
   border: 1px solid var(--border-color);
 }
 

@@ -3,26 +3,26 @@ import { Block } from '@/services/ant-design-pro/api';
 import '../style.css';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useState } from 'react';
 
 type Props = {
   item: Block;
   isBelow?: boolean | null;
   [key: string]: any;
 };
-const Image = ({ item, isBelow, ...props }: Props) => {
+const Image = ({ item, isBelow }: Props) => {
   const {
     options: { imageUrl, alt },
   } = item;
 
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+  const [isHover, setIsHover] = useState(false);
+  const { attributes, listeners, setNodeRef, transform, transition, isOver } = useSortable({
     id: item.id,
     data: item,
   });
 
   const style = {
     transform: CSS.Translate.toString(transform),
-    borderTop: isBelow === false ? '4px solid #66a8ff' : '4px solid transparent',
-    borderBottom: isBelow === true ? '4px solid #66a8ff' : '4px solid transparent',
     transition,
   };
 
@@ -39,9 +39,25 @@ const Image = ({ item, isBelow, ...props }: Props) => {
             : imageUrl
         })`,
         marginTop: 16,
+        position: 'relative',
         ...style,
       }}
-    />
+      onMouseOver={() => setIsHover(true)}
+      onMouseOut={() => setIsHover(false)}
+    >
+      {(isHover || isOver) && (
+        <div
+          style={{
+            position: 'absolute',
+            top: isBelow !== null ? (isBelow === true ? 'calc(100% - 4px)' : 0) : 0,
+            left: 0,
+            right: 0,
+            height: 4,
+            backgroundColor: isBelow !== null ? '#66a8ff' : 'transparent',
+          }}
+        />
+      )}
+    </div>
   );
 };
 

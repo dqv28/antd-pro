@@ -18,7 +18,8 @@ const NoBuilder = ({ id, col, isRow }: Props) => {
       style={{
         backgroundColor: isRow ? 'rgba(26, 115, 232, 0.1)' : 'transparent',
         border: isRow ? '1px dashed rgba(26, 115, 232, 1)' : '',
-        height: 150,
+        minHeight: 150,
+        height: '100%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

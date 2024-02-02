@@ -135,10 +135,11 @@ const hasChild = ['Row', 'Section', 'Box'];
 
 const Builder = (props: Props) => {
   const [activeItem, setActiveItem] = useState<any>();
-  const [overId, setOverId] = useState<UniqueIdentifier>();
+  const [overItem, setOverItem] = useState<any>();
   const [activeNum, setActiveNum] = useState<number>(2);
   const [isBelow, setIsBelow] = useState<boolean | null>(null);
   const [rowChild, setRowChild] = useState<Block[]>([]);
+  const [type, setType] = useState<string>();
   const [builder, setBuilder] = useState<BuilderComp>({
     blocks: [],
   });
@@ -215,7 +216,7 @@ const Builder = (props: Props) => {
         return;
       }
       setIsBelow(null);
-      setOverId('');
+      setOverItem(undefined);
       setBuilder((prevBuilder) => ({
         blocks: addBuilder(prevBuilder.blocks, newComp, active, activeData, over),
       }));
@@ -235,8 +236,11 @@ const Builder = (props: Props) => {
         return;
       }
 
-      setOverId(over.id);
-      console.log(over.id);
+      const {
+        data: { current: overData },
+      } = over;
+
+      setOverItem(overData);
 
       const isBelowOverItem =
         typeof over.id === 'string'
@@ -248,6 +252,13 @@ const Builder = (props: Props) => {
     },
     [isBelow],
   );
+
+  const handleChildClick = (type: string, childId: UniqueIdentifier) => {
+    setType(type);
+  };
+  const handleChildClickOutSide = () => {
+    setType('');
+  };
 
   return (
     <DndContext
@@ -292,6 +303,7 @@ const Builder = (props: Props) => {
             height: 75,
           }}
           headerBordered
+          onClick={handleChildClickOutSide}
         >
           <ProCard
             colSpan={5}
@@ -314,13 +326,16 @@ const Builder = (props: Props) => {
             }}
           >
             {builder && blocks && blocks.length > 0 ? (
-              blocks?.map((item) => (
-                <BuilderItem
-                  item={item}
-                  overId={overId}
-                  isBelow={item.id === overId ? isBelow : null}
-                />
-              ))
+              blocks?.map((item) => {
+                return (
+                  <BuilderItem
+                    item={item}
+                    overItem={overItem}
+                    isBelow={isBelow}
+                    onChildClick={handleChildClick}
+                  />
+                );
+              })
             ) : (
               <NoBuilder id={'no-builder'} isRow={true} />
             )}
@@ -335,7 +350,11 @@ const Builder = (props: Props) => {
             }}
             bordered
           >
-            <BuilderOptions activeNum={activeNum} changeActiveNum={changeActiveNum} />
+            <BuilderOptions
+              type={type ?? ''}
+              activeNum={activeNum}
+              changeActiveNum={changeActiveNum}
+            />
           </ProCard>
         </ProCard>
       </SortableContext>

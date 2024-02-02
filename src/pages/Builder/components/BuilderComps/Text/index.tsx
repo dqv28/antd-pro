@@ -11,7 +11,7 @@ type Props = {
   [key: string]: any;
 };
 
-const Text = ({ item, isBelow, ...props }: Props) => {
+const Text = ({ item, isBelow }: Props) => {
   const [isHover, setIsHover] = useState(false);
   const [change, setChange] = useState(false);
   const {
@@ -28,6 +28,8 @@ const Text = ({ item, isBelow, ...props }: Props) => {
     padding: change ? 0 : '8px 0',
     transition,
   };
+
+  // console.log(isBelow);
 
   return (
     <div ref={setNodeRef} {...attributes} {...listeners} style={style}>

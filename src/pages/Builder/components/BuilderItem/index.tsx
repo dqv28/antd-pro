@@ -1,4 +1,4 @@
-import { Block } from '@/services/ant-design-pro/api';
+import type { Block } from '@/services/ant-design-pro/api';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { childObj } from '../BuilderComps/Object';
@@ -7,11 +7,12 @@ import { UniqueIdentifier } from '@dnd-kit/core';
 type Props = {
   item: Block;
   isBelow?: boolean | null;
-  overId?: UniqueIdentifier;
+  overItem?: Block;
+  onChildClick?: (type: string, childId: UniqueIdentifier) => void;
   [key: string]: any;
 };
 
-const BuilderItem = ({ item, isBelow, overId, ...props }: Props) => {
+const BuilderItem = ({ item, isBelow, overItem, onChildClick }: Props) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: item.id,
     data: item,
@@ -25,9 +26,14 @@ const BuilderItem = ({ item, isBelow, overId, ...props }: Props) => {
 
   const ChildComponent = childObj[item.type];
 
+  const handleClick = (e: any) => {
+    e.stopPropagation();
+    onChildClick?.(item.type, item.id);
+  };
+
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <ChildComponent isBelow={isBelow} item={item} overId={overId} />
+    <div onClick={handleClick} ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <ChildComponent isBelow={isBelow} item={item} overItem={overItem} />
     </div>
   );
 };

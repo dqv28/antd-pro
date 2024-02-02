@@ -1,4 +1,4 @@
-import { Menu } from '@/services/ant-design-pro/api';
+import type { Menu } from '@/services/ant-design-pro/api';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { ModalForm, ProFormItem, ProFormItemProps, ProFormText } from '@ant-design/pro-components';
 import type {
@@ -38,8 +38,6 @@ const MenuItemTable: React.FC<{
   const [offsetLeft, setOffsetLeft] = useState<number>(0);
   const [isGrappng, setIsGrapping] = useState<boolean>(false);
   const [form] = Form.useForm();
-
-  // console.log('render');
 
   const Row = (props: RowProps) => {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({

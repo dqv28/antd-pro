@@ -1,22 +1,21 @@
 import { Block } from '@/services/ant-design-pro/api';
 import { Col, Row } from 'antd';
 import NoBuilder from '../NoBuilder';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
 import '../style.css';
-import { renderColChild } from '../Object';
-import { UniqueIdentifier } from '@dnd-kit/core';
+import { includesChild, renderColChild } from '../Object';
 
 type Props = {
   item: Block;
   isBelow?: boolean | null;
-  overId?: UniqueIdentifier;
+  overItem?: Block;
   [key: string]: any;
 };
 
-const RowComp = ({ item, isBelow, overId }: Props) => {
+const RowComp = ({ item, isBelow, overItem }: Props) => {
   const {
     options: { cols: colCount },
     children,
@@ -38,11 +37,19 @@ const RowComp = ({ item, isBelow, overId }: Props) => {
     transition,
   };
 
-  const childIds = item.children.map((col) => col.id);
+  const isColumn = isBelow === false && overItem && overItem.type === 'Column';
 
   useEffect(() => {
-    setIsHover(childIds.includes(overId ?? '') || item.id === overId);
-  }, [overId]);
+    setIsHover(includesChild(item, item.children, overItem));
+  }, [overItem]);
+
+  const mouseOver = useCallback(() => {
+    setIsHover(true);
+  }, []);
+
+  const mouseOut = useCallback(() => {
+    setIsHover(false);
+  }, []);
 
   useEffect(() => {
     setCols([...children]);
@@ -55,20 +62,20 @@ const RowComp = ({ item, isBelow, overId }: Props) => {
       {...listeners}
       gutter={16}
       style={{ position: 'relative', ...style }}
-      onMouseOver={() => setIsHover(true)}
-      onMouseOut={() => setIsHover(false)}
+      onMouseOver={mouseOver}
+      onMouseOut={mouseOut}
     >
       {cols.map((col: Block, index) => (
         <Col
           span={24 / colCount}
           key={index}
           style={{
-            filter: isBelow === null && overId && col.id === overId ? 'brightness(70%)' : 'none',
+            filter: isColumn && overItem && col.id === overItem.id ? 'brightness(70%)' : 'none',
           }}
         >
           {col.children && col.children.length > 0 ? (
             col.children.map((child: Block, index: number) => (
-              <div key={index}>{renderColChild(child, isBelow, overId)}</div>
+              <div key={index}>{renderColChild(child, isBelow, overItem)}</div>
             ))
           ) : (
             <NoBuilder id={col.id} col={col} isRow={item.type === 'Row'} />
@@ -79,11 +86,11 @@ const RowComp = ({ item, isBelow, overId }: Props) => {
         <div
           style={{
             position: 'absolute',
-            top: isBelow !== null && isBelow === true ? 'calc(100% - 4px)' : 0,
+            top: isBelow === true ? 'calc(100% - 4px)' : 0,
             left: 0,
             right: 0,
             height: 4,
-            backgroundColor: isBelow !== null ? '#66a8ff' : 'transparent',
+            backgroundColor: !isColumn ? '#66a8ff' : 'transparent',
           }}
         />
       )}

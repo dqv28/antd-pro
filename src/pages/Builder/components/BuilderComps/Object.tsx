@@ -5,7 +5,6 @@ import Row from './Row';
 import Box from './Box';
 import Section from './Section';
 import { Block } from '@/services/ant-design-pro/api';
-import { UniqueIdentifier } from '@dnd-kit/core';
 
 export const childObj = {
   Text,
@@ -16,32 +15,36 @@ export const childObj = {
   Section,
 };
 
-export const renderColChild = (
-  child: Block,
-  isBelow?: boolean | null,
-  overId?: UniqueIdentifier,
-) => {
-  const Child = childObj[child.type];
-
-  return <Child item={child} />;
+type Props = {
+  item: Block;
+  isBelow?: boolean | null;
+  overItem?: Block;
+  [key: string]: any;
 };
 
-export const includesChild = (child: Block[], overId: UniqueIdentifier): boolean => {
-  if (!child || !overId || typeof overId === 'number') {
+export const renderColChild = (child: Block, isBelow?: boolean | null, overItem?: Block) => {
+  const Child: React.FC<Props> = childObj[child.type];
+
+  return <Child item={child} isBelow={isBelow} overItem={overItem} />;
+};
+
+export const includesChild = (item: Block, child: Block[], overItem?: Block): boolean => {
+  let isChild: boolean = false;
+  if (child.length <= 0 || !overItem || typeof overItem === 'number') {
     return false;
   }
 
-  for (const childItem of child) {
-    if (childItem.id === overId) {
-      return true;
-    } else {
-      if (childItem.children) {
-        includesChild(childItem.children, overId);
+  if (overItem.type === 'no-builder') {
+    isChild = false;
+  } else {
+    for (const childItem of child) {
+      if (childItem.id === overItem.id) {
+        isChild = true;
       } else {
-        return false;
+        includesChild(item, childItem.children, overItem);
       }
     }
   }
 
-  return true;
+  return isChild;
 };

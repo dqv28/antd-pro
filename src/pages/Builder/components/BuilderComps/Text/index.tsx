@@ -1,4 +1,4 @@
-import { Block } from '@/services/ant-design-pro/api';
+import type { Block } from '@/services/ant-design-pro/api';
 import { useState } from 'react';
 
 import '../style.css';
@@ -28,8 +28,6 @@ const Text = ({ item, isBelow }: Props) => {
     padding: change ? 0 : '8px 0',
     transition,
   };
-
-  // console.log(isBelow);
 
   return (
     <div ref={setNodeRef} {...attributes} {...listeners} style={style}>

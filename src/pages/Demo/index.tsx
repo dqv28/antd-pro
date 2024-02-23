@@ -1,12 +1,11 @@
 import { ProCard, ProList } from '@ant-design/pro-components';
 import React, { useState } from 'react';
-import type { Key } from 'react';
 import Menu from './components/Menu';
 import ConversationContent from './components/ConversationContent';
 import Footer from './components/ConversationContent/ConversationLayout/Footer';
 
 import styles from './index.less';
-import { Avatar, Button, Image, Input, Modal, Space, Tag } from 'antd';
+import { Avatar, Button, Input, Modal, Space } from 'antd';
 import {
   UsergroupAddOutlined,
   SearchOutlined,
@@ -99,14 +98,9 @@ type DataItem = (typeof defaultData)[number];
 const Demo: React.FC = () => {
   const [hasChange, setHasChange] = useState(false);
   const [open, setOpen] = useState(false);
-  const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [search, setSearch] = useState(false);
   const [searchMsgInput, setSearchMsgInput] = useState<string>('');
   const [msgInput, setMsgInput] = useState<string>('');
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: (keys: Key[]) => setSelectedRowKeys(keys),
-  };
 
   const showModal = () => {
     setOpen(true);
@@ -139,7 +133,7 @@ const Demo: React.FC = () => {
         title={<Header />}
         headerBordered
         bordered
-        actions={[<Footer sendMsgInput={(msg: string) => setMsgInput(msg)} />]}
+        actions={[<Footer key={true} sendMsgInput={(msg: string) => setMsgInput(msg)} />]}
         extra={
           <Space>
             <Button
@@ -208,8 +202,9 @@ const Demo: React.FC = () => {
           justifyContent: 'center',
           alignItems: 'center',
         }}
-        children={<InfomationGroup />}
-      ></ProCard>
+      >
+        <InfomationGroup />
+      </ProCard>
 
       <Modal
         title="Thêm thành viên"
@@ -240,8 +235,8 @@ const Demo: React.FC = () => {
         />
 
         <Space size={[6, 12]} className={styles.type_list}>
-          {new Array(20).fill(null).map((_, index) => (
-            <Button key={index} type="text" className={styles.type_btn} size="small">
+          {new Array(20).fill(null).map((i) => (
+            <Button key={i.id} type="text" className={styles.type_btn} size="small">
               Tất cả
             </Button>
           ))}

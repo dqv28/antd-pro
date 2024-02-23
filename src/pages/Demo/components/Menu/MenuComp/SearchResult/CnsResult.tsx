@@ -111,11 +111,9 @@ const CnsResult: React.FC<any> = (props: Props) => {
         >
           <ProList<any>
             headerTitle={
-              <Title
-                children="Trò chuyện (158)"
-                style={{ padding: '0 16px', marginBottom: 0 }}
-                level={5}
-              />
+              <Title style={{ padding: '0 16px', marginBottom: 0 }} level={5}>
+                Trò chuyện (158)
+              </Title>
             }
             cardProps={{
               bodyStyle: {
@@ -158,11 +156,9 @@ const CnsResult: React.FC<any> = (props: Props) => {
             }}
           />
           <div style={{ padding: '0 16px', marginTop: 12 }}>
-            <Button
-              children="Xem tất cả cuộc trò chuyện"
-              type="text"
-              className={styles.see_all_btn}
-            />
+            <Button type="text" className={styles.see_all_btn}>
+              Xem tất cả cuộc trò chuyện
+            </Button>
           </div>
         </div>
       )}
@@ -173,13 +169,14 @@ const CnsResult: React.FC<any> = (props: Props) => {
             className={styles.cns_head_title}
             headerTitle={
               <Title
-                children="Tin nhắn (10)"
                 style={{
                   padding: '0 16px',
                   marginBottom: 0,
                 }}
                 level={5}
-              />
+              >
+                Tin nhắn (10)
+              </Title>
             }
             cardProps={{
               bodyStyle: {
@@ -218,10 +215,7 @@ const CnsResult: React.FC<any> = (props: Props) => {
                     >
                       {record.name}
                     </Text>
-                    <Text
-                      children="38 phút"
-                      style={{ fontSize: 12, color: '#7589a3', fontWeight: 450 }}
-                    />
+                    <Text style={{ fontSize: 12, color: '#7589a3', fontWeight: 450 }}>38 phút</Text>
                   </div>
                 ),
               },
@@ -246,7 +240,9 @@ const CnsResult: React.FC<any> = (props: Props) => {
             }}
           />
           <div style={{ padding: '0 16px', marginTop: 12 }}>
-            <Button children="Xem tất cả tin nhắn" type="text" className={styles.see_all_btn} />
+            <Button type="text" className={styles.see_all_btn}>
+              Xem tất cả tin nhắn
+            </Button>
           </div>
         </div>
       )}

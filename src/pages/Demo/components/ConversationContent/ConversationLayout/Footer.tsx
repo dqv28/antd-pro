@@ -1,5 +1,5 @@
 import { AtIcon, MsgIcon, PandaIcon } from '@/components/Icons';
-import { LikeOutlined, SmileOutlined } from '@ant-design/icons';
+import { SmileOutlined } from '@ant-design/icons';
 import { Button, Input, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
 

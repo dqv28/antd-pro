@@ -62,10 +62,11 @@ const Header: React.FC = () => {
           <Button
             type="text"
             title="9 thành viên"
-            children={<span style={{ marginLeft: 4 }}>9 thành viên</span>}
             icon={<UserOutlined style={{ fontSize: 16 }} />}
             className={styles.subtitle_groupmember}
-          />
+          >
+            <span style={{ marginLeft: 4 }}>9 thành viên</span>
+          </Button>
 
           <Dropdown menu={{ items }} trigger={['click']}>
             <TagOutlined title="Phân loại" className={styles.type_icon} />

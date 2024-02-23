@@ -8,7 +8,7 @@ import {
   UsergroupAddOutlined,
 } from '@ant-design/icons';
 import { ProCard, ProFormText } from '@ant-design/pro-components';
-import { Avatar, Badge, Button, Dropdown, Input, Tabs, Typography } from 'antd';
+import { Avatar, Badge, Button, Dropdown, Tabs, Typography } from 'antd';
 import type { MenuProps } from 'antd';
 import React, { useState } from 'react';
 import ConversationList from '../ConversationList';
@@ -16,6 +16,7 @@ import ConversationList from '../ConversationList';
 import styles from './index.less';
 import SearchResult from './MenuComp/SearchResult';
 import MsgResult from './MenuComp/MsgResult/MsgResult';
+import { uniqueId } from 'lodash';
 
 type Props = {
   search?: boolean;
@@ -141,15 +142,14 @@ const Menu: React.FC<any> = (props: Props) => {
       >
         {props.search ? (
           <div style={{ padding: '20px 0' }}>
-            <Title level={5} children="Kết quả tìm kiếm" style={{ padding: '0 16px' }} />
-            <Text
-              children={
-                props.searchMsgInput
-                  ? 'Danh sách kết quả phù hợp trong hội thoại'
-                  : 'Nhập nội dung cần tìm trong hội thoại'
-              }
-              style={{ padding: '0 16px', width: '100%' }}
-            />
+            <Title level={5} style={{ padding: '0 16px' }}>
+              Kết quả tìm kiếm
+            </Title>
+            <Text style={{ padding: '0 16px', width: '100%' }}>
+              {props.searchMsgInput
+                ? 'Danh sách kết quả phù hợp trong hội thoại'
+                : 'Nhập nội dung cần tìm trong hội thoại'}
+            </Text>
 
             {props.searchMsgInput ? (
               <div
@@ -251,6 +251,7 @@ const Menu: React.FC<any> = (props: Props) => {
                     }}
                     actions={[
                       <div
+                        key={uniqueId()}
                         style={{
                           float: 'left',
                         }}
@@ -299,14 +300,13 @@ const Menu: React.FC<any> = (props: Props) => {
                           style={{
                             padding: '0 6px',
                           }}
-                          children={
-                            <span>
-                              Phân loại
-                              <DownOutlined style={{ marginLeft: 6 }} />
-                            </span>
-                          }
                           className={styles.type_btn}
-                        />
+                        >
+                          <span>
+                            Phân loại
+                            <DownOutlined style={{ marginLeft: 6 }} />
+                          </span>
+                        </Button>
                       </Dropdown>
                       <Dropdown
                         menu={{

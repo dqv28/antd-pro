@@ -1,4 +1,4 @@
-import { Block } from '@/services/ant-design-pro/api';
+import type { Block } from '@/services/ant-design-pro/api';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import NoBuilder from '../NoBuilder';
@@ -25,7 +25,7 @@ const Box = ({ item, isBelow, overItem }: Props) => {
 
   useEffect(() => {
     setIsHover(includesChild(item, item.children, overItem));
-  }, [overItem]);
+  }, [item, overItem]);
 
   const style = {
     transform: CSS.Translate.toString(transform),
@@ -44,6 +44,7 @@ const Box = ({ item, isBelow, overItem }: Props) => {
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
       {item.children.map((col) => (
         <div
+          key={col.id}
           style={{
             position: 'relative',
             padding: '16px 0',

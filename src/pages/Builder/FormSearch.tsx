@@ -2,7 +2,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
 import React from 'react';
 
-const FormSearch: React.FC<{
+const SearchForm: React.FC<{
   value?: any;
   onChange?: (value: any) => void;
 }> = ({ value, onChange }) => {
@@ -21,4 +21,4 @@ const FormSearch: React.FC<{
   );
 };
 
-export default FormSearch;
+export default SearchForm;

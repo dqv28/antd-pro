@@ -1,9 +1,6 @@
 import { ProList } from '@ant-design/pro-components';
-import { Avatar, Button, Typography } from 'antd';
+import { Avatar, Typography } from 'antd';
 import styles from './MsgResult.less';
-import { EllipsisOutlined } from '@ant-design/icons';
-
-type Props = {};
 
 const { Text } = Typography;
 
@@ -110,7 +107,7 @@ const mockListConversation = () => {
   });
 };
 
-const MsgResult = (props: Props) => {
+const MsgResult = () => {
   return (
     <ProList<any>
       headerTitle={<span style={{ padding: '0 16px', color: '#7589a3' }}>Tin nhắn</span>}
@@ -144,10 +141,11 @@ const MsgResult = (props: Props) => {
                 {record.name}
               </Text>
               <Text
-                children="38 phút"
                 style={{ fontSize: 12, color: '#7589a3', fontWeight: 450 }}
                 className={styles.cns_time}
-              />
+              >
+                38 phút
+              </Text>
             </div>
           ),
         },

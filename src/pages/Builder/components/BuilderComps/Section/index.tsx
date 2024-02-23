@@ -1,4 +1,4 @@
-import { Block } from '@/services/ant-design-pro/api';
+import type { Block } from '@/services/ant-design-pro/api';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import NoBuilder from '../NoBuilder';
@@ -30,7 +30,7 @@ const Section = ({ item, isBelow, overItem }: Props) => {
 
   useEffect(() => {
     setIsHover(includesChild(item, item.children, overItem));
-  }, [overItem]);
+  }, [item, overItem]);
 
   const mouseOver = useCallback(() => {
     setIsHover(true);
@@ -44,6 +44,7 @@ const Section = ({ item, isBelow, overItem }: Props) => {
     <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
       {item.children.map((col) => (
         <div
+          key={col.id}
           className="section"
           style={{
             position: 'relative',

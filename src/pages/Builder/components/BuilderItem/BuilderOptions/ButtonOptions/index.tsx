@@ -1,8 +1,6 @@
 import { Form, Input } from 'antd';
 
-type Props = {};
-
-const ButtonOptions = (props: Props) => {
+const ButtonOptions = () => {
   return (
     <Form name="basic" layout="vertical" autoComplete="off">
       <Form.Item label="Text">

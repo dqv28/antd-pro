@@ -7,6 +7,59 @@ export type TableListItem = {
   [key: string]: any;
 };
 
+const items = [
+  {
+    id: '10',
+    name: 'menu',
+    path: 'menu',
+    children: [
+      {
+        id: '12',
+        name: 'child',
+        path: 'child',
+        parentId: '10',
+        children: [
+          {
+            id: '17',
+            name: 'child 4',
+            path: 'child4',
+            parentId: '12',
+            children: [],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: '13',
+    name: 'menu 2',
+    path: 'menu2',
+    children: [],
+  },
+  {
+    id: '14',
+    name: 'menu 3',
+    path: 'menu3',
+    children: [
+      {
+        id: '15',
+        name: 'child 2',
+        path: 'child2',
+        parentId: '14',
+        children: [
+          {
+            id: '16',
+            name: 'child 3',
+            path: 'child3',
+            parentId: '15',
+            children: [],
+          },
+        ],
+      },
+    ],
+  },
+];
+
 const ArticleForm: React.FC = () => {
   const handleSubmit = async (form: any) => {
     console.log('Form', form);
@@ -19,58 +72,7 @@ const ArticleForm: React.FC = () => {
         onFinish={handleSubmit}
         style={{ backgroundColor: '#fff', padding: '16px 24px' }}
         initialValues={{
-          items: [
-            {
-              id: '10',
-              name: 'menu',
-              path: 'menu',
-              children: [
-                {
-                  id: '12',
-                  name: 'child',
-                  path: 'child',
-                  parentId: '10',
-                  children: [
-                    {
-                      id: '17',
-                      name: 'child 4',
-                      path: 'child4',
-                      parentId: '12',
-                      children: [],
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              id: '13',
-              name: 'menu 2',
-              path: 'menu2',
-              children: [],
-            },
-            {
-              id: '14',
-              name: 'menu 3',
-              path: 'menu3',
-              children: [
-                {
-                  id: '15',
-                  name: 'child 2',
-                  path: 'child2',
-                  parentId: '14',
-                  children: [
-                    {
-                      id: '16',
-                      name: 'child 3',
-                      path: 'child3',
-                      parentId: '15',
-                      children: [],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+          items,
         }}
       >
         <ProFormText

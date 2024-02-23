@@ -11,6 +11,7 @@ type MenuItemProps = {
 
 interface Props {
   item: MenuItemProps;
+  key: React.Key;
   [key: string]: any;
 }
 
@@ -26,7 +27,7 @@ const MenuItem = (props: Props) => {
   };
 
   return (
-    <Col span={8} key={props.item.id} ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <Col span={8} key={props.key} ref={setNodeRef} style={style} {...attributes} {...listeners}>
       <Button
         type="text"
         style={{

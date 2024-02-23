@@ -2,9 +2,7 @@ import { Form } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-type Props = {};
-
-const TextOptions = (props: Props) => {
+const TextOptions = () => {
   return (
     <Form name="basic" layout="vertical" autoComplete="off">
       <Form.Item label="Text *">

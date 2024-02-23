@@ -1,4 +1,4 @@
-import { Block } from '@/services/ant-design-pro/api';
+import type { Block } from '@/services/ant-design-pro/api';
 import { Col, Row } from 'antd';
 import NoBuilder from '../NoBuilder';
 import { useCallback, useEffect, useState } from 'react';
@@ -41,7 +41,7 @@ const RowComp = ({ item, isBelow, overItem }: Props) => {
 
   useEffect(() => {
     setIsHover(includesChild(item, item.children, overItem));
-  }, [overItem]);
+  }, [item, overItem]);
 
   const mouseOver = useCallback(() => {
     setIsHover(true);
@@ -53,7 +53,7 @@ const RowComp = ({ item, isBelow, overItem }: Props) => {
 
   useEffect(() => {
     setCols([...children]);
-  }, [item]);
+  }, [children, item]);
 
   return (
     <Row
@@ -65,17 +65,17 @@ const RowComp = ({ item, isBelow, overItem }: Props) => {
       onMouseOver={mouseOver}
       onMouseOut={mouseOut}
     >
-      {cols.map((col: Block, index) => (
+      {cols.map((col: Block) => (
         <Col
+          key={col.id}
           span={24 / colCount}
-          key={index}
           style={{
             filter: isColumn && overItem && col.id === overItem.id ? 'brightness(70%)' : 'none',
           }}
         >
           {col.children && col.children.length > 0 ? (
-            col.children.map((child: Block, index: number) => (
-              <div key={index}>{renderColChild(child, isBelow, overItem)}</div>
+            col.children.map((child: Block) => (
+              <div key={child.id}>{renderColChild(child, isBelow, overItem)}</div>
             ))
           ) : (
             <NoBuilder id={col.id} col={col} isRow={item.type === 'Row'} />

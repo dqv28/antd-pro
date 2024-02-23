@@ -2,17 +2,27 @@ import type { Block } from '@/services/ant-design-pro/api';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { childObj } from '../BuilderComps/Object';
-import { UniqueIdentifier } from '@dnd-kit/core';
+import type { UniqueIdentifier } from '@dnd-kit/core';
+import { Badge } from 'antd';
 
-type Props = {
+type BuidlerItemProps = {
   item: Block;
   isBelow?: boolean | null;
   overItem?: Block;
   onChildClick?: (type: string, childId: UniqueIdentifier) => void;
+  key: React.Key;
+  active: any;
   [key: string]: any;
 };
 
-const BuilderItem = ({ item, isBelow, overItem, onChildClick }: Props) => {
+const BuilderItem: React.FC<BuidlerItemProps> = ({
+  item,
+  isBelow,
+  overItem,
+  onChildClick,
+  active,
+  key,
+}) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: item.id,
     data: item,
@@ -27,13 +37,24 @@ const BuilderItem = ({ item, isBelow, overItem, onChildClick }: Props) => {
   const ChildComponent = childObj[item.type];
 
   const handleClick = (e: any) => {
+    console.log(active);
+    console.log(item);
     e.stopPropagation();
     onChildClick?.(item.type, item.id);
   };
 
   return (
-    <div onClick={handleClick} ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <ChildComponent isBelow={isBelow} item={item} overItem={overItem} />
+    <div
+      key={key}
+      onClick={handleClick}
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+    >
+      <Badge dot={active !== null && active.id === item.id} style={{ marginTop: 16 }}>
+        <ChildComponent isBelow={isBelow} item={item} overItem={overItem} />
+      </Badge>
     </div>
   );
 };

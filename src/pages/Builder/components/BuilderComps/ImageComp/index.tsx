@@ -1,4 +1,4 @@
-import { Block } from '@/services/ant-design-pro/api';
+import type { Block } from '@/services/ant-design-pro/api';
 
 import '../style.css';
 import { useSortable } from '@dnd-kit/sortable';

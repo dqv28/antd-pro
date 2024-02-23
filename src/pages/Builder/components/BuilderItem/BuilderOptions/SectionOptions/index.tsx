@@ -1,8 +1,6 @@
 import { Form, Input } from 'antd';
 
-type Props = {};
-
-const SectionOptions = (props: Props) => {
+const SectionOptions = () => {
   return (
     <Form name="basic" layout="vertical" autoComplete="off">
       <Form.Item label="Max inner width">

@@ -1,11 +1,11 @@
 import {
-  Article,
+  type Article,
   getArticleList,
   getEventList,
   getLaunchList,
 } from '@/services/ant-design-pro/api';
 import {
-  ActionType,
+  type ActionType,
   ProFormDateRangePicker,
   ProFormSelect,
   ProFormText,

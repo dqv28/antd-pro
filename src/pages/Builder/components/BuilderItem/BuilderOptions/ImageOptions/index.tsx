@@ -1,8 +1,6 @@
-import { Button, Form, Image, Input, Space, Upload, UploadProps, message } from 'antd';
+import { Button, Form, Image, Input, Space } from 'antd';
 
-type Props = {};
-
-const ImageOptions = (props: Props) => {
+const ImageOptions = () => {
   return (
     <Form name="basic" layout="vertical" autoComplete="off">
       <Form.Item label="Image *">

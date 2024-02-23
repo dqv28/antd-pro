@@ -1,6 +1,6 @@
 import { CaretRightOutlined } from '@ant-design/icons';
 import { ProList } from '@ant-design/pro-components';
-import { Key, useState } from 'react';
+import { type Key, useState } from 'react';
 import RowOptions from './BuilderOptions/RowOptions';
 import BoxOpttions from './BuilderOptions/BoxOptions';
 import ButtonOptions from './BuilderOptions/ButtonOptions';
@@ -21,11 +21,10 @@ const NoOption = () => (
     <div style={{ padding: '20px 40px' }}>Select an element to edit its options</div>
     <ChooseIcon style={{ display: 'block', padding: '20px 40px' }} />
   </>
-)
+);
 
 const BuilderOptions = ({ activeNum, changeActiveNum, type }: Props) => {
   const [expandedRowKeys, setExpandedRowKeys] = useState<readonly Key[]>([0]);
-  // const [type, setType] = useState('Image');
 
   const options = {
     Row: <RowOptions activeNum={activeNum} changeActiveNum={changeActiveNum} />,
@@ -36,10 +35,14 @@ const BuilderOptions = ({ activeNum, changeActiveNum, type }: Props) => {
     Text: <TextOptions />,
   };
 
+  const handleClick = (e: any) => {
+    e.stopPropagation();
+  };
+
   const data = [
     {
       title: 'Block Options',
-      description: <>{options[type] ?? <NoOption />}</>, 
+      description: <div onClick={handleClick}>{options[type] ?? <NoOption />}</div>,
     },
     {
       title: 'Advanced Options',

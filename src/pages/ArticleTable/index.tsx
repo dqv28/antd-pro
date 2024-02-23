@@ -1,5 +1,5 @@
 import {
-  Article,
+  type Article,
   getArticleList,
   getEventList,
   getLaunchList,
@@ -30,7 +30,7 @@ const ArticleTable = () => {
           };
         }}
         form={{
-          syncToUrl: (value, _type = 'set') => ({
+          syncToUrl: (value) => ({
             q: value.title_contains,
             date_from: value.date ? value.date[0] : '',
             date_to: value.date ? value.date[1] : '',

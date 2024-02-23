@@ -1,11 +1,11 @@
 import { CaretRightOutlined } from '@ant-design/icons';
 import { ProList } from '@ant-design/pro-components';
 import { Row } from 'antd';
-import { Key, useState } from 'react';
+import { type Key, useState } from 'react';
 import MenuItem from './MenuItem';
 
 import './Menu.css';
-import { CompList } from '@/services/ant-design-pro/api';
+import type { CompList } from '@/services/ant-design-pro/api';
 
 type Props = {
   compLists: CompList[];
@@ -21,7 +21,7 @@ const MenuComp = ({ compLists }: Props) => {
       description: (
         <Row gutter={[8, 8]} style={{ marginTop: 16 }}>
           {compLists.map((item) => (
-            <MenuItem item={item} />
+            <MenuItem key={item.id} item={item} />
           ))}
         </Row>
       ),
@@ -31,7 +31,7 @@ const MenuComp = ({ compLists }: Props) => {
       description: (
         <Row gutter={[8, 8]} style={{ marginTop: 16 }}>
           {compLists.map((item) => (
-            <MenuItem item={item} />
+            <MenuItem key={item.id} item={item} />
           ))}
         </Row>
       ),
@@ -41,7 +41,7 @@ const MenuComp = ({ compLists }: Props) => {
       description: (
         <Row gutter={[8, 8]} style={{ marginTop: 16 }}>
           {compLists.map((item) => (
-            <MenuItem item={item} />
+            <MenuItem key={item.id} item={item} />
           ))}
         </Row>
       ),

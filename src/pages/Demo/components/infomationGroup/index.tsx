@@ -1,25 +1,20 @@
 import {
-  AppstoreOutlined,
   BellOutlined,
-  MailOutlined,
   PushpinOutlined,
   SettingOutlined,
   UsergroupAddOutlined,
 } from '@ant-design/icons';
 import { Avatar, Menu, Space, Typography } from 'antd';
-import type { MenuProps } from 'antd';
-import React, { useState } from 'react';
+import React from 'react';
 
 import styles from './index.less';
-
-type Props = {};
 
 const { Title } = Typography;
 
 const items = [
   {
     key: 'sub 1',
-    label: <Title level={5} children="Thành viên nhóm" />,
+    label: <Title level={5}>Thành viên nhóm</Title>,
     children: [
       {
         key: 1,
@@ -30,7 +25,7 @@ const items = [
   },
 ];
 
-const InfomationGroup: React.FC = (props: Props) => {
+const InfomationGroup: React.FC = () => {
   return (
     <>
       <div
@@ -46,7 +41,9 @@ const InfomationGroup: React.FC = (props: Props) => {
           src="https://ava-grp-talk.zadn.vn/2/7/4/b/2/360/a8e4edcbf5d655b3080b2d5ad6c1dccd.jpg"
         />
 
-        <Title level={4} children="Cơm trưa" style={{ padding: '8px 0' }} />
+        <Title level={4} style={{ padding: '8px 0' }}>
+          Cơm trưa
+        </Title>
       </div>
 
       <Space style={{ width: '100%', padding: '0 16px' }}>

@@ -4,25 +4,20 @@ import { Button } from 'antd';
 import { BuilderComps } from './components/BuilderComps';
 import {
   DndContext,
-  DragEndEvent,
-  DragMoveEvent,
   DragOverlay,
-  DragStartEvent,
   MouseSensor,
   TouchSensor,
-  UniqueIdentifier,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
+import type { DragEndEvent, DragMoveEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
 import { useCallback, useEffect, useState } from 'react';
-import { Block, BuilderComp } from '@/services/ant-design-pro/api';
+import type { Block, BuilderComp } from '@/services/ant-design-pro/api';
 import NoBuilder from './components/BuilderComps/NoBuilder';
 import { uniqueId } from 'lodash';
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable';
 import BuilderItem from './components/BuilderItem';
 import BuilderOptions from './components/BuilderItem/BuilderOptions';
-
-type Props = {};
 
 const optionsComp = {
   Text: {
@@ -68,7 +63,7 @@ const optionsComp = {
 };
 
 const filterBuilder = (blocks: Block[], activeId: UniqueIdentifier) => {
-  let newBlocks: Block[] = [];
+  const newBlocks: Block[] = [];
   for (const block of blocks) {
     if (block.id === activeId) {
       newBlocks.push();
@@ -91,7 +86,6 @@ const addBuilder = (
   overItem: any,
 ): Block[] => {
   let newBlocks: Block[] = [...blocks];
-  let newIndex: number;
   const overIndex = blocks?.findIndex((item) => item.id === overItem.id);
   const idArr = blocks.map((item) => item.id);
 
@@ -100,7 +94,7 @@ const addBuilder = (
     activeItem.rect.current.translated.top > overItem.rect.top + overItem.rect.height / 2;
 
   const modifier = isBelowOverItem ? 1 : 0;
-  newIndex = overIndex >= 0 ? overIndex + modifier : idArr.length + 1;
+  const newIndex = overIndex >= 0 ? overIndex + modifier : idArr.length + 1;
 
   if (!overItem) {
     return newBlocks;
@@ -133,8 +127,8 @@ const addBuilder = (
 
 const hasChild = ['Row', 'Section', 'Box'];
 
-const Builder = (props: Props) => {
-  const [activeItem, setActiveItem] = useState<any>();
+const Builder = () => {
+  const [activeItem, setActiveItem] = useState<any>(null);
   const [overItem, setOverItem] = useState<any>();
   const [activeNum, setActiveNum] = useState<number>(2);
   const [isBelow, setIsBelow] = useState<boolean | null>(null);
@@ -149,8 +143,8 @@ const Builder = (props: Props) => {
 
   useEffect(() => {
     setRowChild(() => {
-      const cols = optionsComp['Row'].options.cols;
-      let child = [];
+      const cols = optionsComp.Row.options.cols;
+      const child = [];
       for (let i = 0; i < cols; i++) {
         child.push({
           id: uniqueId(),
@@ -230,41 +224,38 @@ const Builder = (props: Props) => {
     setActiveItem(activeData);
   };
 
-  const handleDragMove = useCallback(
-    ({ active, over }: DragMoveEvent) => {
-      if (!over) {
-        return;
-      }
+  const handleDragMove = useCallback(({ active, over }: DragMoveEvent) => {
+    if (!over) {
+      return;
+    }
 
-      const {
-        data: { current: overData },
-      } = over;
+    const {
+      data: { current: overData },
+    } = over;
 
-      setOverItem(overData);
+    setOverItem(overData);
 
-      const isBelowOverItem =
-        typeof over.id === 'string'
-          ? active.rect.current.translated &&
-            active.rect.current.translated.top > over.rect.top + over.rect.height / 2
-          : null;
+    const isBelowOverItem =
+      typeof over.id === 'string'
+        ? active.rect.current.translated &&
+          active.rect.current.translated.top > over.rect.top + over.rect.height / 2
+        : null;
 
-      setIsBelow(isBelowOverItem);
-    },
-    [isBelow],
-  );
+    setIsBelow(isBelowOverItem);
+  }, []);
 
-  const handleChildClick = (type: string, childId: UniqueIdentifier) => {
-    setType(type);
+  const handleChildClick = (childType: string) => {
+    setType(childType);
   };
   const handleChildClickOutSide = () => {
     setType('');
+    setActiveItem(null);
   };
 
   return (
     <DndContext
       sensors={sensors}
       onDragStart={handleDragStart}
-      // onDragOver={handleDragOver}
       onDragMove={handleDragMove}
       onDragEnd={handleDragEnd}
     >
@@ -329,7 +320,9 @@ const Builder = (props: Props) => {
               blocks?.map((item) => {
                 return (
                   <BuilderItem
+                    key={item.id}
                     item={item}
+                    active={activeItem}
                     overItem={overItem}
                     isBelow={isBelow}
                     onChildClick={handleChildClick}

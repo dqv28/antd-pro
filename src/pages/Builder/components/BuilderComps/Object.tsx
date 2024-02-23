@@ -4,7 +4,7 @@ import Image from './ImageComp';
 import Row from './Row';
 import Box from './Box';
 import Section from './Section';
-import { Block } from '@/services/ant-design-pro/api';
+import type { Block } from '@/services/ant-design-pro/api';
 
 export const childObj = {
   Text,

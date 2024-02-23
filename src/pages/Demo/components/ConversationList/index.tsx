@@ -2,7 +2,7 @@ import React from 'react';
 import { ProList } from '@ant-design/pro-components';
 import styles from './index.less';
 import { Avatar, Button, Typography } from 'antd';
-import { EllipsisOutlined, Loading3QuartersOutlined } from '@ant-design/icons';
+import { EllipsisOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
 
@@ -150,10 +150,11 @@ const ConversationList: React.FC<any> = ({ isUnRead }) => {
                   {record.name}
                 </Text>
                 <Text
-                  children="38 phút"
                   style={{ fontSize: 12, color: '#7589a3', fontWeight: 450 }}
                   className={styles.cns_time}
-                />
+                >
+                  38 phút
+                </Text>
                 <Button
                   size="small"
                   type="text"

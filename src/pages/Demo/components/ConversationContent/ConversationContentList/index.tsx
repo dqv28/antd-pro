@@ -1,8 +1,8 @@
 import { Avatar, Button, Skeleton, Space } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
-
 import { ProCard, ProList } from '@ant-design/pro-components';
-import { Msg, listMsg, resetEmoticon, sendEmoticon } from '@/services/ant-design-pro/api';
+import { type Msg, listMsg, resetEmoticon, sendEmoticon } from '@/services/ant-design-pro/api';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import styles from './index.less';
 import { CloseOutlined, LikeOutlined } from '@ant-design/icons';
@@ -14,7 +14,6 @@ import {
   ShareIcon,
   SquareCheckIcon,
 } from '@/components/Icons';
-import InfiniteScroll from 'react-infinite-scroll-component';
 
 type Props = {
   cnsMessage: string;
@@ -124,66 +123,66 @@ const ConversationContentList: React.FC<any> = (props: Props) => {
                   title={!msg.mine && msg.name}
                   bordered
                   style={{ backgroundColor: msg.mine ? '#e5efff' : '#fff' }}
-                  children={
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      {msg.desc} {(msg.emoji && <PandaIcon style={{ fontSize: 30 }} />) || ''}
-                      <span style={{ fontSize: 12, color: '#476285', marginTop: 8 }}>21:44</span>
-                      {msg.emoticon > 0 ? (
-                        <Button
-                          size="small"
-                          type="text"
-                          className={styles.heart_icon}
-                          icon={emojis.map(
-                            (emojis: any) => emojis.id === msg.emotId && emojis.icon,
-                          )}
-                          children={
-                            <span style={{ marginLeft: 2, fontSize: 14 }}>{msg.emoticon}</span>
-                          }
-                        />
-                      ) : (
-                        <Button
-                          size="small"
-                          shape="circle"
-                          type="text"
-                          className={styles.like_icon}
-                          icon={<LikeOutlined />}
-                          onClick={() => {
-                            sendEmot({ id: msg.id, emotId: 1 });
-                          }}
-                        />
-                      )}
-                      <Space className={styles.emoji_group}>
-                        {emojis
-                          .sort((a, b) => b.id - a.id)
-                          .map((emoji: any) => (
-                            <Button
-                              className={styles.emoji_item}
-                              onClick={() => {
-                                sendEmot({ id: msg.id, emotId: emoji.id });
-                              }}
-                              type="text"
-                              size="small"
-                              children={emoji.icon}
-                            />
-                          ))}
-
-                        {msg.emoticon > 0 && (
+                  bodyStyle={{ padding: '4px 12px 12px', fontSize: 15, color: '#081c36' }}
+                  headStyle={{ padding: '0 12px' }}
+                >
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    {msg.desc} {(msg.emoji && <PandaIcon style={{ fontSize: 30 }} />) || ''}
+                    <span style={{ fontSize: 12, color: '#476285', marginTop: 8 }}>21:44</span>
+                    {msg.emoticon > 0 ? (
+                      <Button
+                        size="small"
+                        type="text"
+                        className={styles.heart_icon}
+                        icon={emojis.map(
+                          (emojiList: any) => emojiList.id === msg.emotId && emojiList.icon,
+                        )}
+                      >
+                        <span style={{ marginLeft: 2, fontSize: 14 }}>{msg.emoticon}</span>
+                      </Button>
+                    ) : (
+                      <Button
+                        size="small"
+                        shape="circle"
+                        type="text"
+                        className={styles.like_icon}
+                        icon={<LikeOutlined />}
+                        onClick={() => {
+                          sendEmot({ id: msg.id, emotId: 1 });
+                        }}
+                      />
+                    )}
+                    <Space className={styles.emoji_group}>
+                      {emojis
+                        .sort((a, b) => b.id - a.id)
+                        .map((emoji: any) => (
                           <Button
+                            key={emoji.id}
                             className={styles.emoji_item}
                             onClick={() => {
-                              resetEmot(msg.id);
+                              sendEmot({ id: msg.id, emotId: emoji.id });
                             }}
                             type="text"
                             size="small"
-                            icon={<CloseOutlined />}
-                          />
-                        )}
-                      </Space>
-                    </div>
-                  }
-                  bodyStyle={{ padding: '4px 12px 12px', fontSize: 15, color: '#081c36' }}
-                  headStyle={{ padding: '0 12px' }}
-                />
+                          >
+                            {emoji.icon}
+                          </Button>
+                        ))}
+
+                      {msg.emoticon > 0 && (
+                        <Button
+                          className={styles.emoji_item}
+                          onClick={() => {
+                            resetEmot(msg.id);
+                          }}
+                          type="text"
+                          size="small"
+                          icon={<CloseOutlined />}
+                        />
+                      )}
+                    </Space>
+                  </div>
+                </ProCard>
                 <div
                   className={styles.msg_btn_group_wrapper}
                   style={{
@@ -192,30 +191,18 @@ const ConversationContentList: React.FC<any> = (props: Props) => {
                   }}
                 >
                   <Space className={styles.msg_btn_group}>
-                    <Button
-                      className={styles.msg_action}
-                      type="text"
-                      size="small"
-                      children={<QuoteIcon className={styles.msg_icon} />}
-                    />
-                    <Button
-                      className={styles.msg_action}
-                      type="text"
-                      size="small"
-                      children={<ShareIcon className={styles.msg_icon} />}
-                    />
-                    <Button
-                      className={styles.msg_action}
-                      type="text"
-                      size="small"
-                      children={<SquareCheckIcon className={styles.msg_icon} />}
-                    />
-                    <Button
-                      className={styles.msg_action}
-                      type="text"
-                      size="small"
-                      children={<EllipsisIcon className={styles.msg_icon} />}
-                    />
+                    <Button className={styles.msg_action} type="text" size="small">
+                      <QuoteIcon className={styles.msg_icon} />
+                    </Button>
+                    <Button className={styles.msg_action} type="text" size="small">
+                      <ShareIcon className={styles.msg_icon} />
+                    </Button>
+                    <Button className={styles.msg_action} type="text" size="small">
+                      <SquareCheckIcon className={styles.msg_icon} />
+                    </Button>
+                    <Button className={styles.msg_action} type="text" size="small">
+                      <EllipsisIcon className={styles.msg_icon} />
+                    </Button>
                   </Space>
                 </div>
               </div>

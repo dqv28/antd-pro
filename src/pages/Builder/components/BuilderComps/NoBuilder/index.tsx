@@ -1,6 +1,6 @@
-import { Block } from '@/services/ant-design-pro/api';
+import type { Block } from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
-import { UniqueIdentifier, useDroppable } from '@dnd-kit/core';
+import { type UniqueIdentifier, useDroppable } from '@dnd-kit/core';
 
 type Props = {
   id: UniqueIdentifier;

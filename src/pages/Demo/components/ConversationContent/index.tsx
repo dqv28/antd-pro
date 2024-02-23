@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Button, Dropdown, MenuProps, Space, Typography } from 'antd';
+import { useRef } from 'react';
+import { Button, Dropdown, type MenuProps, Space, Typography } from 'antd';
 import {
   CaretDownOutlined,
   ClockCircleOutlined,
@@ -95,33 +95,36 @@ const ConversationContent: React.FC<any> = (props: Props) => {
               <Button
                 type="text"
                 shape="round"
-                children="Đóng"
                 className={styles.cns_search_btn}
                 onClick={props.onClick}
-              />
+              >
+                Đóng
+              </Button>
             </div>
 
             <div style={{ marginTop: 12 }}>
-              <Text children="Lọc theo:" />
+              <Text>Lọc theo:</Text>
               <Dropdown menu={{ items }} trigger={['click']}>
                 <Button
-                  children="Người gửi"
                   icon={<DownOutlined />}
                   type="text"
                   className={styles.cns_filter_btn}
                   shape="round"
                   size="small"
-                />
+                >
+                  Người gửi
+                </Button>
               </Dropdown>
               <Dropdown menu={{ items }} trigger={['click']}>
                 <Button
-                  children="Người gửi"
                   icon={<DownOutlined />}
                   type="text"
                   className={styles.cns_filter_btn}
                   shape="round"
                   size="small"
-                />
+                >
+                  Người gửi
+                </Button>
               </Dropdown>
             </div>
           </>
@@ -142,11 +145,9 @@ const ConversationContent: React.FC<any> = (props: Props) => {
               />
 
               <div className={styles.cns_topic_msg}>
-                <Title
-                  children="Tin nhắn"
-                  level={5}
-                  style={{ fontSize: 13, fontWeight: 600, marginBottom: 0 }}
-                />
+                <Title level={5} style={{ fontSize: 13, fontWeight: 600, marginBottom: 0 }}>
+                  Tin nhắn
+                </Title>
                 <Text ellipsis style={{ fontSize: 13 }}>
                   Tuan Duc Tran: Link: Mọi người join vào nhóm chat này nhé!
                 </Text>
